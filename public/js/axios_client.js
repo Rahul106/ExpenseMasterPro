@@ -20,12 +20,12 @@ document.getElementById("i_signInForm").addEventListener("submit", async (e) => 
 
   if(!email.trim()) {
     document.querySelector("#errorAlert").innerText = `Kindly fill email field.!!!`;
-    return AlertUtils.alertAwakeSleep();;
+    return alertAwakeSleep();;
   }
 
   if(!password.trim()) {
     document.querySelector("#errorAlert").innerText = `Kindly fill password field.!!!`;
-    return AlertUtils.alertAwakeSleep();
+    return alertAwakeSleep();
   }
   
     const loginObj = {email, password};
@@ -54,7 +54,7 @@ document.getElementById("i_signInForm").addEventListener("submit", async (e) => 
 
 } catch (err) {
   document.querySelector("#errorAlert").innerText = `${err.response.data.message}`;
-  AlertUtils.alertAwakeSleep();
+  alertAwakeSleep();
   throw new Error(err);
 }
 
@@ -84,7 +84,7 @@ async function addNewUser(uObj) {
 
     if (response.status === 201) {
       document.querySelector("#successAlert").innerText = `${response.data.userAddedResponse}`;
-      AlertUtils.successAlertAwakeSleep();
+      successAlertAwakeSleep();
       location.reload();
     } else {
       throw new Error("Error creating user");
@@ -93,7 +93,7 @@ async function addNewUser(uObj) {
   } catch (error) {
     console.log(`error in adding user :  ${error}`);
     document.querySelector("#errorAlert").innerText = `${error.response.data.message}`;
-    AlertUtils.alertAwakeSleep();
+    alertAwakeSleep();
   }
 
 }
@@ -109,13 +109,13 @@ document.getElementById("si_userForm").addEventListener("submit", async (e) => {
 
   if (!name) {
     document.querySelector("#errorAlert").innerText = 'Please fill name field.';
-    return AlertUtils.alertAwakeSleep();
+    return alertAwakeSleep();
   } else if (!email) {
     document.querySelector("#errorAlert").innerText = 'Please fill email field.';
-    return AlertUtils.alertAwakeSleep();
+    return alertAwakeSleep();
   } else if (!password) {
     document.querySelector("#errorAlert").innerText = 'Please fill password field.';
-    return AlertUtils.alertAwakeSleep();
+    return alertAwakeSleep();
   }
 
   console.log("name : ", name);
@@ -162,4 +162,20 @@ function isAWSRegion() {
   // Check if the AWS SDK configuration has a region set
   //return !!AWS.config.region;
   return false;
+}
+
+
+function alertAwakeSleep() {
+  document.querySelector("#errorAlert").classList.toggle("hidden");
+  setTimeout(function () {
+    document.getElementById("errorAlert").classList.toggle("hidden");
+  }, 1500);
+}
+
+
+function  successAlertAwakeSleep() {
+  document.querySelector("#successAlert").classList.toggle("hidden");
+  setTimeout(function () {
+    document.getElementById("successAlert").classList.toggle("hidden");
+  }, 2000);
 }

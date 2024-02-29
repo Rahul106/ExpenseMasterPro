@@ -1,5 +1,6 @@
 
 const UserModel = require('../models/User');
+const bcrypt = require("bcrypt");
 const { isNotValidInput } = require('../utils/validation');
 const { comparePasswords } = require('../utils/password');
 
@@ -49,12 +50,11 @@ exports.createNewUser = async(req, res, next) => {
             return res.status(400).json({ message: 'password is not present. kindly fill the password' });
         }
 
-        //const hashedPswd = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
         await UserModel.create({
           name,
           email,
-          password
-          //password: hashedPswd,
+          password: hashedPassword
         });
         
         return res.status(201).json({ userAddedResponse: "Successfuly created new user.!" });
