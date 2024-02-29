@@ -13,7 +13,7 @@ const User = require("./models/User");
 
 
 //importing routes
-const commonRoutes = require("./routes/user");
+const userRoute = require("./routes/user");
 
 
 //middlewares
@@ -22,9 +22,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(publicPath));
 
 
-app.get('/', (req, res, next) => {
-    res.sendFile(path.join(__dirname, '/views/index.html'));
+//registering routes to app
+app.use(userRoute);
+
+
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });  
+
+app.get('/home', (req, res) => {
+  res.sendFile('home.html', {root:'views'});
+});
 
 
 const PORT = process.env.PORT || 4000;
