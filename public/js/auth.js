@@ -1,13 +1,6 @@
 //const AWS = require('aws-sdk');
 const LOCAL_WINDOWS_APIURL = 'http://3.109.143.245:4000';
 const LOCAL_AWS_APIURL = 'http://localhost:4000';
-const container = document.getElementById("container");
-const registerBtn = document.getElementById("register");
-const loginBtn = document.getElementById("login");
-
-const navbarMenu = document.querySelector(".navbar .links");
-const hamburgerBtn = document.querySelector(".hamburger-btn");
-const hideMenuBtn = navbarMenu.querySelector(".close-btn");
 
 
 document.getElementById("i_signInForm").addEventListener("submit", async (e) => {
@@ -132,32 +125,6 @@ document.getElementById("si_userForm").addEventListener("submit", async (e) => {
 });
 
 
-
-registerBtn.addEventListener("click", () => {
-  container.classList.add("active");
-});
-
-
-
-loginBtn.addEventListener("click", () => {
-  container.classList.remove("active");
-});
-
-
-// Show mobile menu
-hamburgerBtn.addEventListener("click", () => {
-  navbarMenu.classList.toggle("show-menu");
-  container.style.display = "none";
-});
-
-
-// Hide mobile menu
-hideMenuBtn.addEventListener("click", () => {
-  hamburgerBtn.click();
-  container.style.display = "block";
-});
-
-
 function isAWSRegion() {
   // Check if the AWS SDK configuration has a region set
   //return !!AWS.config.region;
@@ -179,3 +146,5 @@ function  successAlertAwakeSleep() {
     document.getElementById("successAlert").classList.toggle("hidden");
   }, 2000);
 }
+
+

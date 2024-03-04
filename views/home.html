@@ -1,11 +1,414 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!--Bootstrap 5 icons CDN-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- ======= Styles ====== -->
+    <link rel="stylesheet" href="/css/home.css">
+
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/css/appform.css">
+
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <title>Dashboard Sidebar Menu</title>
+    <style>
+        .menu-links .nav-link .icon {
+            margin-left: -3.0rem;
+            /* Adjust icon spacing */
+
+        }
+    </style>
 </head>
+
 <body>
-    Rahullllllllllllllll
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="./images/Logo5.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">Expensify</span>
+                    <span class="profession">Expense-Income-Track</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header> 
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-home-alt icon'></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-bar-chart-alt-2 icon'></i>
+                            <span class="text nav-text">Revenue</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Notifications</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-pie-chart-alt icon'></i>
+                            <span class="text nav-text">Analytics</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-heart icon'></i>
+                            <span class="text nav-text">Likes</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-wallet icon'></i>
+                            <span class="text nav-text">Wallets</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="#">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark mode</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div class="text">Dashboard Sidebar</div>
+
+        <section class="p-3">
+            <div class="row">
+                <div class="col-12">
+                    <button onclick="resetForm()" class="btn btn-primary btn-lg newExpense" data-bs-toggle="modal"
+                        data-bs-target="#addExpenseForm">New Expense
+                        <i class="bi bi-people"></i></button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped table-hover mt-3 text-center table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="tHead">S.No</th>
+                                <th class="tHead">Picture</th>
+                                <th class="tHead">Type</th>
+                                <th class="tHead">Category</th>
+                                <th class="tHead">Name</th>
+                                <th class="tHead">Description</th>
+                                <th class="tHead">Amount</th>
+                                <th class="tHead">Date</th>
+                                <th class="tHead">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="expenseData"></tbody>
+
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!--Modal Form-->
+        <section class="section-2">
+            <div class="modal fade" id="addExpenseForm">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title">Expense-Income-Form</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="row">
+                            <div class="modal-body">
+                                <form class="formbox" id="i_expPaperWorkForm" action="/expense" method="POST">
+
+                                    <!-- Left Half Div -->
+                                    <div class="col-md-3">
+                                        <!-- Your Left Half Form Content Goes Here -->
+                                        <div class="card imgholder">
+                                            <label for="i_imgInput" class="upload">
+                                                <input type="file" name="n_imgInput" id="i_imgInput">
+                                                <i class="bi bi-plus-circle-dotted plusicon"></i>
+                                            </label>
+                                            <img src="./images/Profile Icon.webp" alt="" width="200" height="180"
+                                                class="img resi">
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Right Half Div -->
+                                    <div class="col-md-9">
+                                        <!-- Upper Half with Radio Buttons -->
+                                        <div class="text-center mb-3 radioContainer">
+                                            <input type="radio" id="expense" name="n_transactionType" value="Expense"
+                                                checked>
+                                            <label for="expense">Expense</label>
+                                            <input type="radio" id="income" name="n_transactionType" value="Income">
+                                            <label for="income">Income</label>
+                                        </div>
+
+                                        <p id="selectedType"></p>
+
+                                        <!-- Lower Half Div with Two Equal Divs -->
+                                        <div class="row">
+                                            
+
+                                            <div class="col-md-6 text-center">
+                                                <div class="input_Field">
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-primary dropdown-toggle w-100 lbl dropdownBtn"
+                                                            type="button" id="i_expenseCategoryDropdown"
+                                                            name="n_Category" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            Category
+                                                        </button>
+                                                        <ul class="dropdown-menu" aria-labelledby="i_expenseCategoryDropdown">
+                                                            
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Electronics & Electrical</a>
+                                                            </li>
+                                                            
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Fashion & Beauty</a>
+                                                            </li>
+                                                            
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Food & Dining</a>
+                                                            </li>
+                                                            
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Travel & Transportation</a>
+                                                            </li>
+                                                            
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Housing</a></li>
+                                                            
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Health & Fitness</a>
+                                                            </li>
+                                                            
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Entertainment</a>
+                                                            </li>
+                                                           
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Personal Care</a>
+                                                            </li>
+                                                            
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Education & Books</a>
+                                                            </li>
+
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Gifts & Donations</a>
+                                                            </li>
+
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Savings & Investments</a>
+                                                            </li>
+                                                
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Bills & EMI's</a>
+                                                            </li>
+            
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Sports & Outdoor</a>
+                                                            </li>
+                                                            
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Office & Professional</a>
+                                                            </li>
+
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Others</a>
+                                                            </li>
+                                                        
+                                                        </ul>
+                                                    </div>
+
+                                                    <div>
+                                                        <label for="i_expName" class="lbl">Name:</label>
+                                                        <input type="text" name="n_expName" id="i_expName" required>
+                                                    </div>
+
+                                                    <div>
+                                                        <label for="i_expAmount" class="lbl">Amount:</label>
+                                                        <input type="number" name="n_expAmount" id="i_expAmount"
+                                                            required>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-6 text-center">
+                                                <div class="input_Fields">
+
+                                                    <div>
+                                                        <label for="i_expDate" class="lbl">Date:</label>
+                                                        <input type="date" name="n_expDate" id="i_expDate" required>
+                                                    </div>
+
+                                                    <div>
+                                                        <label for="i_expDescription"  class="deslbl"></label>
+                                                        <textarea class="form-control" name="n_expDescription" id="i_expDescription" rows="4"
+                                                            cols="100" placeholder="Expense Description Mandatory"
+                                                            required></textarea>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-lg" id="clsBtn"
+                                data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary btn-lg submit" id="subBtn"
+                                form="i_expPaperWorkForm">Submit</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </section>
+
+    
+    <section class="section-3">
+        <!--Read Data Modal-->
+        <div class="modal fade" id="readData">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Expense Profile</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form action="#" id="i_expPaperWorkForm" class="displayBox">
+                            <div class="card imgholder box">
+                                <img src="/images/Profile Icon.webp" alt="" width="200" height="200" class="n_showImg">
+                            </div>
+                            <div class="input_Fields">
+                                <div>
+                                    <label class="display" for="i_show_expType">Type:</label>
+                                    <input type="text" name="n_show_expType" id="i_show_expType" disabled>
+                                </div>
+                                <div>
+                                    <label class="display" for="i_show_expCat">Category:</label>
+                                    <input type="text" name="n_show_expCat" id="i_show_expCat" disabled>
+                                </div>
+                                <div>
+                                    <label class="display" for="i_show_expName">Name:</label>
+                                    <input type="text" name="n_show_expName" id="i_show_expName" disabled>
+                                </div>
+                                <div>
+                                    <label class="display" for="i_show_expAmt">Amount:</label>
+                                    <input type="number" name="n_show_expAmt" id="i_show_expAmt" disabled>
+                                </div>
+                                <div>
+                                    <label class="display" for="i_show_expDate">Date:</label>
+                                    <input type="date" name="n_show_expDate" id="i_show_expDate" disabled>
+                                </div>
+                                <div>
+                                    <label class="display" for="i_show_expDesc">Description:</label>
+                                    <input type="text" name="n_show_expDesc" id="i_show_expDesc" disabled>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- jQuery from CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script src="/js/navbar.js"></script>
+    <script src="/js/appform.js"></script>
+    
+
 </body>
+
 </html>
