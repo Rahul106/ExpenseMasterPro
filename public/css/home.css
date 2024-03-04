@@ -262,6 +262,9 @@ body.dark .mode .sun-moon i.moon{
     opacity: 0;
 }
 
+.menu-bar .bottom-content {
+    margin-bottom: 200px;
+}
 .menu-bar .bottom-content .toggle-switch{
     position: absolute;
     right: 0;

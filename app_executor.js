@@ -5,11 +5,18 @@ const bodyParser = require("body-parser");
 const sequelize = require("./utils/database");
 
 
+
+//middleware for user authentication
+const userAuthentication = require('./middlewares/auth');
+
+
 const publicPath = path.join(__dirname, "public");
 
 
 //models
 const User = require("./models/User");
+const Expense = require('./models/Expense');
+
 
 
 //importing routes
@@ -18,19 +25,16 @@ const expenseRoutes = require('./routes/expense');
 
 
 //middlewares
+require('dotenv').config();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(publicPath));
 
 
-//registering routes to app
-app.use(userRoute);
-app.use('/expense', expenseRoutes);
-
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'portal.html'));
+  res.sendFile('portal.html', {root: 'views'});
 });  
 
 app.get('/home', (req, res) => {
@@ -43,9 +47,20 @@ app.get('/dashboard', (req, res) => {
 
 
 
+
+//router middlewares
+app.use('/user', userRoute);
+
+app.use(userAuthentication.authenticate);
+
+app.use('/expense', expenseRoutes);
+
+
+
 //DB Relations
-// User.hasMany(Expense);
-// Expense.belongsTo(User);
+User.hasMany(Expense);
+Expense.belongsTo(User);
+
 
 
 

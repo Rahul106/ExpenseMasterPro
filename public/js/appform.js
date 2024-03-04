@@ -1,3 +1,6 @@
+const localPublicIP = 'http://localhost:4000';
+ //const publicIp='http://3.109.143.245:4000';
+
 let form = document.getElementById('addExpenseForm');
 let imgInput = document.querySelector('.img');
 let imgFile = document.getElementById('i_imgInput');
@@ -16,10 +19,9 @@ let newExpenseBtn = document.querySelector('.newExpense');
 const dropdownItems = document.querySelectorAll('.dropdown-item');
 let selectedCategory = '';
 
-$(".dropdown-menu li a").click(function(){
-    var selText = $(this).text();
-    $(this).parents('.dropdown').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
-  });
+
+let isEdit = false;
+let editId = 0;
 
 
 console.log('Form' + form);
@@ -35,8 +37,10 @@ console.log('UserButton : ' + newExpenseBtn);
 
 
 
-let isEdit = false;
-let editId = 0;
+$(".dropdown-menu li a").click(function(){
+    var selText = $(this).text();
+    $(this).parents('.dropdown').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+  });
 
 
 
@@ -69,6 +73,8 @@ function selectCandidate(item) {
     item.classList.add("active");
 
 }
+
+
 
 
 function getSelectedCandidate() {
@@ -111,40 +117,34 @@ imgFile.onchange = function () {
 
 
 
-async function showExpenseInfo() {  
 
-    // Clear existing posts
-    expData.innerHTML = "";
+async function showExpenseInfo(element,  index) {  
 
-    const responseExpenses = await axios.get('http://localhost:4000/expense/fetch-expenses');
 
-    responseExpenses.data.data.forEach((element, index) => {
-
-        const date = new Date(element.date);
-
-        const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-
-        let createElement = `<tr class='expenseDetail'>
-            <td data-title="S.No">${index + 1}</td>
-            <td data-title="Expense Picture"><img src='${element.imgPath}' alt='' width='50' height='50'></td>
-            <td data-title="Expense Type">${element.type}</td>
-            <td data-title="Expense Category">${element.category}</td>
-            <td data-title="Expense Name">${element.name}</td>
-            <td data-title="Expense Desciption">${element.description}</td>
-            <td data-title="Expense Amount">${element.amount}</td>
-            <td data-title="Expense Date">${formattedDate}</td>
-
-            <td data-title="Action">
-                <button class='btn btn-success' onclick="readInfo('${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#readData'><i class='bi bi-eye'></i></button>
-                <button class='btn btn-primary' onclick="editInfo('${element.id}', '${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#addExpenseForm'><i class='bi bi-pencil-square'></i></button>
-                <button class='btn btn-danger' onclick='deleteInfo(${element.id})'><i class='bi bi-trash'></i></button>
-            </td>
-        </tr>`
-
-        expData.innerHTML += createElement;
-    });
+    const date = new Date(element.date);    
+            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    
+            let createElement = `<tr class='expenseDetail'>
+                <td data-title="S.No">${index + 1}</td>
+                <td data-title="Expense Picture"><img src='${element.imgPath}' alt='' width='50' height='50'></td>
+                <td data-title="Expense Type">${element.type}</td>
+                <td data-title="Expense Category">${element.category}</td>
+                <td data-title="Expense Name">${element.name}</td>
+                <td data-title="Expense Desciption">${element.description}</td>
+                <td data-title="Expense Amount">${element.amount}</td>
+                <td data-title="Expense Date">${formattedDate}</td>
+    
+                <td data-title="Action">
+                    <button class='btn btn-success' onclick="readInfo('${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#readData'><i class='bi bi-eye'></i></button>
+                    <button class='btn btn-primary' onclick="editInfo('${element.id}', '${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#addExpenseForm'><i class='bi bi-pencil-square'></i></button>
+                    <button class='btn btn-danger' onclick='deleteInfo(${element.id})'><i class='bi bi-trash'></i></button>
+                </td>
+            </tr>`
+    
+            expData.innerHTML += createElement;
 
 }
+
 
 
 
@@ -159,6 +159,7 @@ function readInfo(ePic, eType, eCat, eName, eDesc, eAmt, eDate) {
         document.querySelector('#i_show_expDate').value = eDate;
 
 }
+
 
 
 
@@ -201,7 +202,8 @@ async function deleteInfo(index) {
 
         confirm('Are you sure want to delete?')
         console.log(`Deleting user with ID : ${index}`);
-        const response = await axios.delete(`http://localhost:4000/expense/delete-expense/${index}`);
+        
+        const response = await axios.delete(`http://localhost:4000/expense/delete-expense/${index}`, getHeaders());
          
         if (response.status === 200) {
             alert('User successfully deleted');
@@ -236,14 +238,13 @@ form.addEventListener('submit', async (e) => {
 
         try {
 
-            const resp = await axios.post('http://localhost:4000/expense/insert-expense', formData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const resp = await axios.post(`${localPublicIP}/expense/insert-expense`, formData, getHeaders());
 
             if (resp.status === 201) {
+
                 alert('Expense added successfully');
+                const data = resp.data.data;
+                showExpenseInfo(data, data.id);
                 location.reload();
 
             } else {
@@ -258,12 +259,7 @@ form.addEventListener('submit', async (e) => {
 
         try {
 
-            const response = await axios.put(`http://localhost:4000/expense/update-expense/${editId}`, formData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
+            const response = await axios.put(`${localPublicIP}/expense/update-expense/${editId}`, formData, getHeaders());
 
             if (response.status === 200) {
                 alert('Expense updated successfully');
@@ -292,7 +288,7 @@ async function fetchTotalExpense() {
 
     try {
         
-        const response = await axios.get('http://localhost:3000/expenseadmin/totalexpense');
+        const response = await axios.get(`${localPublicIP}/expenseadmin/totalexpense`);
         const totalExpense = response.data.totalExpense;
         document.getElementById('totalPrice').value = totalExpense;
     
@@ -303,14 +299,24 @@ async function fetchTotalExpense() {
 }
 
 
+
 // Call the fetchTotalExpense function when the page loads
-document.addEventListener('DOMContentLoaded', showExpenseInfo);
+document.addEventListener('DOMContentLoaded', async () => {
 
-///showExpenseInfo();
+    expData.innerHTML = "";
+    const responseExpenses = await axios.get(`${localPublicIP}/expense/fetch-expenses`, getHeaders());
+
+    if(responseExpenses.data) {
+        responseExpenses.data.data.forEach((elem, indx) => {
+            showExpenseInfo(elem, indx);
+        });
+    }
+    
+});
 
 
 
-
+//Reset form
 function resetForm() {
   
     isEdit = false;
@@ -329,4 +335,21 @@ function resetForm() {
     expAmt.value = '';
     expDate.value = '';
 
+}
+
+
+
+
+//set headers and token
+function getHeaders() {
+
+    const token = localStorage.getItem('token');
+    const headers = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    };
+
+    return headers;
 }
