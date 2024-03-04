@@ -1,6 +1,7 @@
 
 const UserModel = require('../models/User');
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 const { isNotValidInput } = require('../utils/validation');
 const { comparePasswords } = require('../utils/password');
 
@@ -23,11 +24,18 @@ exports.authenticateUser = async(req, res, next) => {
     const user = await UserModel.findOne({ where: { email } });
     
     if(user) {
-       return comparePasswords(password, user.password) ?  res.status(200).json({message: 'User logged in successfully', success: true}) : res.status(401).json({ message: 'User not authorized. Password Incorrect.' , success: false }); 
+      
+      bcrypt.compare(password, user.password, (hasherr, hashresponse) => {
+        if(hasherr){
+          throw new Error("Something went wrong in authentication");
+        }
+       return hashresponse === true ?  res.status(200).json({message: 'User logged in successfully', success: true}) : res.status(401).json({ message: 'User not authorized. Password Incorrect.' , success: false });
+      });
+
     } else {
         return res.status(404).json({ message: 'User not found/exists' });
     }
-
+    
   } catch (error) {
     return res.status(500).json({ message:error });
   }
@@ -68,3 +76,8 @@ exports.createNewUser = async(req, res, next) => {
     
 };
 
+
+//function generateAccessToken ...has(payload,secretkey) encrypt payload using secret key
+const generateAccessToken = (id, name)=>{
+  return jwt.sign({userId:id, name:name}, process.env.JWT_SECRET_KEY)
+}

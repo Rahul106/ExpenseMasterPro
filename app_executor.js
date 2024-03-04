@@ -14,6 +14,7 @@ const User = require("./models/User");
 
 //importing routes
 const userRoute = require("./routes/user");
+const expenseRoutes = require('./routes/expense');
 
 
 //middlewares
@@ -24,16 +25,28 @@ app.use(express.static(publicPath));
 
 //registering routes to app
 app.use(userRoute);
+app.use('/expense', expenseRoutes);
 
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.sendFile(path.join(__dirname, 'views', 'portal.html'));
 });  
 
 app.get('/home', (req, res) => {
   res.sendFile('home.html', {root:'views'});
 });
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile('dashboard.html', {root:'views'});
+});
+
+
+
+//DB Relations
+// User.hasMany(Expense);
+// Expense.belongsTo(User);
+
 
 
 const PORT = process.env.PORT || 4000;
