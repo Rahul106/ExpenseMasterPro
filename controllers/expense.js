@@ -1,3 +1,5 @@
+const sequelize = require('../utils/database');
+
 const Expense = require('../models/Expense')
 
 
@@ -89,6 +91,7 @@ exports.deleteExpense = async (req, res) => {
     const rowsDeleted = await Expense.destroy({
       where: {
         id: id,
+        userId: req.user.id
       },
     });
 
@@ -129,8 +132,8 @@ exports.deleteExpense = async (req, res) => {
 exports.getAllExpenses = async (req, res) => {
 
   try {
-      
-    const allExpenses = await Expense.findAll();
+    
+    const allExpenses = await Expense.findAll({ where: {userId : req.user.id}});
     console.log(`All-Expenses : ${allExpenses}`);
 
     if (!allExpenses || allExpenses.length === 0) {
@@ -162,26 +165,31 @@ exports.getAllExpenses = async (req, res) => {
 
 
 //Post Request - AddExpense
-exports.postExpenseData = async (req,res) => {
+exports.postExpenseData = async (req, res) => {
 
-    try {
+  console.log('-------------Image-Path -------------' +req.body.n_imgInput);
+  console.log('--------------RadioFilter -------------' +req.body.n_transactionType);
+  console.log('-------------Category -------------' +req.body.n_Category);
+  console.log('-------------Expense-Name-------------' +req.body.n_expName);
+  console.log('-------------Amount -------------' +req.body.n_expAmount);
+  console.log('-------------Description -------------' +req.body.n_expDescription);
+  console.log('-------------date -------------' +req.body.n_expDate);  
+  console.log('-----------------Request-Body--------------------' +req.body);
+  console.log('-----------------Request-Param--------------------' +req.user.id);
+
+ // const t = await sequelize.transaction();
+
+  try {
      
-        console.log('-------------Image-Path -------------' +req.body.n_imgInput);
-        console.log('--------------RadioFilter -------------' +req.body.n_transactionType);
-        console.log('-------------Category -------------' +req.body.n_Category);
-        console.log('-------------Expense-Name-------------' +req.body.n_expName);
-        console.log('-------------Amount -------------' +req.body.n_expAmount);
-        console.log('-------------Description -------------' +req.body.n_expDescription);
-        console.log('-------------date -------------' +req.body.n_expDate);
-
         const newExpense = await Expense.create({
-            imgPath: req.body.n_imgInput,
-            type: req.body.n_transactionType,
-            category: req.body.n_Category,
-            name: req.body.n_expName,
-            amount: req.body.n_expAmount,
-            description: req.body.n_expDescription,
-            date: req.body.n_expDate
+            imgPath : req.body.n_imgInput,
+            type : req.body.n_transactionType,
+            category : req.body.n_Category,
+            name : req.body.n_expName,
+            amount : req.body.n_expAmount,
+            description : req.body.n_expDescription,
+            date : req.body.n_expDate,
+            userId : req.user.id
         });
 
         if (newExpense) {
@@ -206,7 +214,9 @@ exports.postExpenseData = async (req,res) => {
           }
 
     } catch(error) {
+        //await t.rollback();
         console.error("Error in adding expense : " +error.message);
+        
         return res
             .status(500)
             .json({ status: "Failed-Error", message: "Failed to create post." });

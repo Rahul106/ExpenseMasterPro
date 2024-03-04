@@ -1,4 +1,3 @@
-//const AWS = require('aws-sdk');
 const LOCAL_WINDOWS_APIURL = 'http://3.109.143.245:4000';
 const LOCAL_AWS_APIURL = 'http://localhost:4000';
 
@@ -36,6 +35,8 @@ document.getElementById("i_signInForm").addEventListener("submit", async (e) => 
     const response = await axios.post(apiURL, loginObj);
     if (response.status === 200) {
 
+      localStorage.setItem('token', response.data.token)
+      alert(response.data.message);
       console.log(response.data.message);
       window.location.href = "/home";
       e.target.n_email.value = '';
@@ -146,5 +147,6 @@ function  successAlertAwakeSleep() {
     document.getElementById("successAlert").classList.toggle("hidden");
   }, 2000);
 }
+
 
 
