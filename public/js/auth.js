@@ -37,7 +37,7 @@ document.getElementById("i_signInForm").addEventListener("submit", async (e) => 
 
       localStorage.setItem('token', response.data.token)
       alert(response.data.message);
-      console.log(response.data.message);
+      
       window.location.href = "/home";
       e.target.n_email.value = '';
       e.target.n_password.value = '';

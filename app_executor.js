@@ -16,12 +16,14 @@ const publicPath = path.join(__dirname, "public");
 //models
 const User = require("./models/User");
 const Expense = require('./models/Expense');
+const Order = require('./models/Order');
 
 
 
 //importing routes
 const userRoute = require("./routes/user");
 const expenseRoutes = require('./routes/expense');
+const purchaseRoutes = require('./routes/purchase');
 
 
 //middlewares
@@ -37,6 +39,10 @@ app.get('/', (req, res) => {
   res.sendFile('portal.html', {root: 'views'});
 });  
 
+app.get('/logout', (req, res) => {
+  res.sendFile('portal.html', {root: 'views'});
+});
+
 app.get('/home', (req, res) => {
   res.sendFile('home.html', {root:'views'});
 });
@@ -51,15 +57,19 @@ app.get('/dashboard', (req, res) => {
 //router middlewares
 app.use('/user', userRoute);
 
-app.use(userAuthentication.authenticate);
+app.use(userAuthentication.isAuthenticated);
 
 app.use('/expense', expenseRoutes);
+app.use('/purchase', purchaseRoutes);
 
 
 
 //DB Relations
 User.hasMany(Expense);
 Expense.belongsTo(User);
+
+User.hasMany(Order);
+Order.belongsTo(User);
 
 
 

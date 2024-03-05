@@ -31,11 +31,20 @@ exports.authenticateUser = async(req, res, next) => {
           throw new Error("Something went wrong in authentication");
         }
        
-        console.log('-------------------' +generateAccessToken(user.id, user.name));
+        if(hashresponse) {
 
-       return hashresponse === true ?  res.status(200).json({message: 'User logged in successfully', success: true, token : generateAccessToken(user.id, user.name)}) 
-       : res.status(401).json({ message: 'User not authorized. Password Incorrect.' , success: false });
-      
+          const token = generateAccessToken(user.id, user.name);
+
+          // req.session.timer = setTimeout(() => {
+          //   console.log('User automatically logged out after inactivity.');
+          // }, 1 * 60 * 1000);
+
+          return res.status(200).json({message: 'User logged in successfully', success: true, token : token})
+          
+        } else {
+          res.status(401).json({ message: 'User not authorized. Password Incorrect.' , success: false });
+        }
+
       });
 
     } else {

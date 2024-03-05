@@ -17,6 +17,7 @@ registerBtn.addEventListener("click", () => {
     container.classList.remove("active");
   });
   
+
   
   // Show mobile menu
   hamburgerBtn.addEventListener("click", () => {
@@ -25,12 +26,14 @@ registerBtn.addEventListener("click", () => {
   });
   
   
+  
   // Hide mobile menu
   hideMenuBtn.addEventListener("click", () => {
     hamburgerBtn.click();
     container.style.display = "block";
   });
   
+
 
 function togglePasswordVisibility() {
 
@@ -49,6 +52,7 @@ function togglePasswordVisibility() {
   
   }
   
+
   
   function togglePasswordVisibilitys() {
     
@@ -65,6 +69,7 @@ function togglePasswordVisibility() {
       toggleIcon.classList.add("fa-lock");
     
     }
+
   }
   
   

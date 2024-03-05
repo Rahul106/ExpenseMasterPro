@@ -2,21 +2,22 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
 
 
-const authenticate = (req, res, next)=> {
+const isAuthenticated = (req, res, next)=> {
     
     try {
         
         const token = req.header('Authorization');
-
+        console.log(`Token:  ${token}`);
+        
         if(!token) { 
             return res
             .status(401)
             .json({ message: 'Unauthorized. No token provided.' }); 
         }
 
-        console.log('-----------------Authenticate-----------------------')
-        const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        console.log('-----------------Authenticate-----------------------');
 
+        const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
         console.log(`User : ${user}`);
 
         User
@@ -38,6 +39,5 @@ const authenticate = (req, res, next)=> {
    
 }
 
-module.exports = {
-    authenticate
-}
+module.exports = {isAuthenticated};
+

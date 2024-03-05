@@ -167,7 +167,7 @@ exports.getAllExpenses = async (req, res) => {
 //Post Request - AddExpense
 exports.postExpenseData = async (req, res) => {
 
-  console.log('-------------Image-Path -------------' +req.body.n_imgInput);
+  //console.log('-------------Image-Path -------------' +req.body.n_imgInput);
   console.log('--------------RadioFilter -------------' +req.body.n_transactionType);
   console.log('-------------Category -------------' +req.body.n_Category);
   console.log('-------------Expense-Name-------------' +req.body.n_expName);

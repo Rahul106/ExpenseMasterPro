@@ -239,7 +239,6 @@ form.addEventListener('submit', async (e) => {
         try {
 
             const resp = await axios.post(`${localPublicIP}/expense/insert-expense`, formData, getHeaders());
-
             if (resp.status === 201) {
 
                 alert('Expense added successfully');
