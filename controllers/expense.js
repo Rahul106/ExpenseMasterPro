@@ -1,6 +1,7 @@
 const sequelize = require('../utils/database');
-
 const Expense = require('../models/Expense')
+const User = require('../models/User')
+
 
 
 
@@ -9,41 +10,43 @@ exports.updateExpense = async (req, res) => {
 
   try {
       
-      const {amount ,description, category, amountType} = req.body;
-      const { id } = req.params;
+    const {amount ,description, category, amountType} = req.body;
+    const { id } = req.params;
       
-      if (!id.trim()) { 
-        return res
+    if (!id.trim()) { 
+      return res
         .status(400)
         .json({error: 'Expense Id is missing in url for update.'})
-      }
+    }
       
-      const updatedExpense = await Expense.update({ 
-        imgPath: req.body.n_imgInput,
-        type: req.body.n_transactionType,
-        category: req.body.n_Category,
-        name: req.body.n_expName,
-        amount: req.body.n_expAmount,
-        description: req.body.n_expDescription,
-        date: req.body.n_expDate
-      }, 
-      { 
-          where: {id : id} 
-      });
+    const updatedExpense = await Expense.update({ 
+      imgPath: req.body.n_imgInput,
+      type: req.body.n_transactionType,
+      category: req.body.n_Category,
+      name: req.body.n_expName,
+      amount: req.body.n_expAmount,
+      description: req.body.n_expDescription,
+      date: req.body.n_expDate
+    }, 
+    { 
+      where: {id : id} 
+    });
         
-      if (updatedExpense[0] === 0) {
-        return res
-          .status(400)
-          .json({ status: "Failed",
-              message: "Expense Update Failed", 
-              data: updatedExpense });   
-      }
-    
+    if (updatedExpense[0] === 0) {
       return res
-          .status(200)
-          .json({ status: "Success",
-              message: "Expense Updated SuccessFully", 
-              data: updatedExpense }); 
+        .status(400)
+        .json({ status: "Failed",
+          message: "Expense Update Failed", 
+          data: updatedExpense });   
+    }
+    
+    return res
+      .status(200)
+      .json({ 
+        status: "Success",
+        message: "Expense Updated SuccessFully", 
+        data: updatedExpense 
+      }); 
 
   } catch(err) {
 
@@ -178,47 +181,53 @@ exports.postExpenseData = async (req, res) => {
   console.log('-----------------Request-Body--------------------' +req.body);
   console.log('-----------------Request-Param--------------------' +req.user.id);
 
-  try {
+  let t;
+
+  try { 
+
+    t = await sequelize.transaction();
         
-        const newExpense = await Expense.create({
-            imgPath : req.body.n_imgInput,
-            type : req.body.n_transactionType,
-            category : req.body.n_Category,
-            name : req.body.n_expName,
-            amount : req.body.n_expAmount,
-            description : req.body.n_expDescription,
-            date : req.body.n_expDate,
-            userId : req.user.id
+    const newExpense = await Expense.create({
+      imgPath : req.body.n_imgInput,
+      type : req.body.n_transactionType,
+      category : req.body.n_Category,
+      name : req.body.n_expName,
+      amount : req.body.n_expAmount,
+      description : req.body.n_expDescription,
+      date : req.body.n_expDate,
+      userId : req.user.id
+    }, { transaction: t });
+
+    const user = await User.findByPk(req.user.id, { transaction: t });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      let totalAmount = user.totalamount + newExpense.amount;
+      await user.update({ totalamount: totalAmount }, { transaction: t });
+      await t.commit();
+  
+      console.log('------Expense Inserted Successfully-------');
+      
+      return res
+        .status(201)
+        .json({
+          status: "success",
+          message: "Expense inserted successfully.",
+          data: newExpense,
         });
-
-        if (newExpense) {
-            
-            console.log('------Expense Inserted Sucessfully-------')
-            
-            return res.status(201).json({
-              status: "success",
-              message: "Expense inserted successfully.",
-              data: newExpense,
-            });
-          
-          } else {
-            
-            console.log('------Expense Insertion Fails-------')
-            return res
-              .status(500)
-              .json({ status: "Failed", 
-              message: "Expense insertion fails. Failed to add expense."
-             });
-          
-          }
-
-    } catch(error) {
-        //await t.rollback();
-        console.error("Error in adding expense : " +error.message);
         
-        return res
-            .status(500)
-            .json({ status: "Failed-Error", message: "Failed to create post." });
+    } catch(error) {
+      await t.rollback();
+      console.error("Error in adding expense : " +error.message);
+        
+      return res
+        .status(500)
+        .json({ 
+          status: "Failed-Error", 
+          message: "Failed to create post." 
+        });
     }
 
 }
