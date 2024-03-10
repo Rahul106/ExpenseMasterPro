@@ -1,6 +1,5 @@
 const localPublicIP = 'http://localhost:4000';
  //const publicIp='http://3.109.143.245:4000';
-
 let form = document.getElementById('addExpenseForm');
 let imgInput = document.querySelector('.img');
 let imgFile = document.getElementById('i_imgInput');
@@ -120,7 +119,6 @@ imgFile.onchange = function () {
 
 async function showExpenseInfo(element,  index) {  
 
-
     const date = new Date(element.date);    
             const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     
@@ -164,7 +162,7 @@ function readInfo(ePic, eType, eCat, eName, eDesc, eAmt, eDate) {
 
 
 function editInfo(index, ePic, eType,  eCat, eName, eDesc, eAmt, eDate) {
-    
+   
     isEdit = true;
     editId = index;
     imgInput.src = ePic;
@@ -176,13 +174,7 @@ function editInfo(index, ePic, eType,  eCat, eName, eDesc, eAmt, eDate) {
         document.getElementById('income').checked = true;
     }
 
-    // For Dropdown
-    let dropdownItems = document.querySelectorAll('#i_expenseCategoryDropdown .dropdown-item');
-    dropdownItems.forEach(item => {
-        if (item.innerText.trim() === eCat) {
-            document.getElementById('i_expenseCategoryDropdown').innerText = eCat;
-        }
-    });
+    document.getElementById('i_expenseCategoryDropdown').innerText = eCat;
 
     expName.value = eName;
     expDesc.value = eDesc;
@@ -315,6 +307,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
+
+
 //Reset form
 function resetForm() {
   
@@ -338,17 +332,58 @@ function resetForm() {
 
 
 
+function createPaginationButtons() {
 
-//set headers and token
-function getHeaders() {
+    const totalItems = sampleData.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+    const paginationButtonsElement = document.getElementById("paginationButtons");
+    paginationButtonsElement.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement("button");
+        button.classList.add("btn", "btn-secondary", "mx-1");
+        button.textContent = i;
+
+        button.addEventListener("click", function () {
+            displayData(i);
+        });
+
+        paginationButtonsElement.appendChild(button);
+    }
+}
+
+
+
+
+
+//!Homework - Make Below Code Modular
+//TODO - set headers and token
+const getHeaders = () => {
     const token = localStorage.getItem('token');
     const headers = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     };
-
+  
     return headers;
-}
+  };
+  
+  
+  
+  
+  //TODO - check Local/Production
+  const getAPIURL = () => {
+  
+    if (environment.toUpperCase() === 'LOCAL') {
+      return LOCAL_WINDOWS_APIURL;
+    } else if (environment.toUpperCase() === 'PRODUCTION') {
+      return LOCAL_AWS_APIURL;
+    } else {
+      throw new Error('Invalid environment specified');
+    }
+  
+  };
+  

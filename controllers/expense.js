@@ -7,7 +7,6 @@ const Expense = require('../models/Expense')
 //update expense
 exports.updateExpense = async (req, res) => {
 
-  console.log('----------------------------------');
   try {
       
       const {amount ,description, category, amountType} = req.body;
@@ -128,6 +127,7 @@ exports.deleteExpense = async (req, res) => {
 
 
 
+
 //Get Request - Fetch Expense
 exports.getAllExpenses = async (req, res) => {
 
@@ -164,6 +164,7 @@ exports.getAllExpenses = async (req, res) => {
 
 
 
+
 //Post Request - AddExpense
 exports.postExpenseData = async (req, res) => {
 
@@ -177,10 +178,8 @@ exports.postExpenseData = async (req, res) => {
   console.log('-----------------Request-Body--------------------' +req.body);
   console.log('-----------------Request-Param--------------------' +req.user.id);
 
- // const t = await sequelize.transaction();
-
   try {
-     
+        
         const newExpense = await Expense.create({
             imgPath : req.body.n_imgInput,
             type : req.body.n_transactionType,

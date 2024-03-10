@@ -7,34 +7,9 @@ const hamburgerBtn = document.querySelector(".hamburger-btn");
 const hideMenuBtn = navbarMenu.querySelector(".close-btn");
 
 
-registerBtn.addEventListener("click", () => {
-    container.classList.add("active");
-  });
-  
-  
-  
-  loginBtn.addEventListener("click", () => {
-    container.classList.remove("active");
-  });
-  
-
-  
-  // Show mobile menu
-  hamburgerBtn.addEventListener("click", () => {
-    navbarMenu.classList.toggle("show-menu");
-    container.style.display = "none";
-  });
-  
-  
-  
-  // Hide mobile menu
-  hideMenuBtn.addEventListener("click", () => {
-    hamburgerBtn.click();
-    container.style.display = "block";
-  });
-  
 
 
+//TODO - hide show password - login
 function togglePasswordVisibility() {
 
     const passwordInput = document.getElementById("i_password");
@@ -51,10 +26,12 @@ function togglePasswordVisibility() {
     }
   
   }
-  
 
   
-  function togglePasswordVisibilitys() {
+
+
+//TODO - hide show password - signup
+function togglePasswordVisibilitys() {
     
     const passwordInput = document.getElementById("si_password");
     const toggleIcon = document.querySelector(".toggle-passwords");
@@ -66,10 +43,41 @@ function togglePasswordVisibility() {
     } else {
       passwordInput.type = "password";
       toggleIcon.classList.remove("fa-unlock-alt");
-      toggleIcon.classList.add("fa-lock");
-    
+      toggleIcon.classList.add("fa-lock");  
     }
 
   }
   
+
+
+
   
+  registerBtn.addEventListener("click", () => {
+    container.classList.add("active");
+  });
+  
+  
+  
+
+  loginBtn.addEventListener("click", () => {
+    container.classList.remove("active");
+  });
+  
+
+
+  
+  //TODO  - Show mobile menu
+  hamburgerBtn.addEventListener("click", () => {
+    navbarMenu.classList.toggle("show-menu");
+    container.style.display = "none";
+  });
+  
+  
+  
+  
+  //TODO - Hide mobile menu
+  hideMenuBtn.addEventListener("click", () => {
+    hamburgerBtn.click();
+    container.style.display = "block";
+  });
+ 

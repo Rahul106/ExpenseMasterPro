@@ -3,6 +3,82 @@ const User = require('../models/User');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const { isNotValidInput } = require('../utils/validation');
+const { Sequelize } = require('sequelize');
+const Expense = require('../models/Expense');
+
+
+
+//CurrentUserInformation
+exports.getCurrentUserInfo = async(req, res, next) => {
+
+  console.log('-----Request-User-Info------');
+
+  try {
+     
+    console.log('User-Id : ' +req.user.id);
+
+    const userDetails = await User.findOne({
+      attributes: ['name', 'email', 'ispremiumuser'],
+      where: {
+        id: req.user.id
+      }
+    });
+
+    const totalExpense = await Expense.sum('amount', {
+      where: {
+        userId: req.user.id,
+        type: 'expense'
+      }
+    });
+
+    
+    const totalIncome = await Expense.sum('amount', {
+      where: {
+        userId: req.user.id,
+        type: 'income' 
+      }
+    });
+    
+    if (userDetails && (totalExpense || totalIncome)) {
+        
+      console.log('------User Found Successfull-------')
+      
+      return res.status(200).json({
+        status: "success",
+        message: "User found successfull.",
+        data: {
+          name: userDetails.name,
+          email: userDetails.email,
+          ispremiumuser: userDetails.ispremiumuser,
+          totalexpense: totalExpense || 0,
+          totalincome: totalIncome || 0
+        },
+      });
+    
+    } else {
+      
+      console.log('------User Not Found -------')
+      return res
+        .status(404)
+        .json({ status: "Failed", 
+        message: "User not found"
+       });
+    
+    }
+
+  } catch(error) {
+  
+    console.error("Error in fetching current user: " +error.message);
+    
+    return res
+        .status(500)
+        .json({ status: "Failed-Error", message: "Error-Failed to Found User." });
+  } 
+
+}
+
+
+
 
 
 
@@ -39,7 +115,7 @@ exports.authenticateUser = async(req, res, next) => {
           //   console.log('User automatically logged out after inactivity.');
           // }, 1 * 60 * 1000);
 
-          return res.status(200).json({message: 'User logged in successfully', success: true, token : token})
+          return res.status(200).json({message: 'User logged in successfully', success: true, token : token, data: user})
           
         } else {
           res.status(401).json({ message: 'User not authorized. Password Incorrect.' , success: false });

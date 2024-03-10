@@ -354,3 +354,36 @@ input[type="radio"]:checked + label {
     background-color: var(--primary-color);
     color: white;
 }
+
+
+.iBtn {
+    background-color: #512da8;
+    color: #fff;
+    font-weight: 800px;
+    margin-left: 580px;
+}
+
+
+.filterEntries .entries select{
+    padding: 5px 10px;
+}
+
+.filterEntries .filter{
+    display: flex;
+    align-items: center;
+}
+
+.pagination button.active, .pagination button:hover{
+    background: var(--red1);
+}
+
+
+.pagination button.act:first-child{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pagination button.act:last-child{
+    opacity: 1;
+    pointer-events: auto;
+}

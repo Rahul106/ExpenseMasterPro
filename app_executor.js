@@ -24,6 +24,8 @@ const Order = require('./models/Order');
 const userRoute = require("./routes/user");
 const expenseRoutes = require('./routes/expense');
 const purchaseRoutes = require('./routes/purchase');
+const premiumUserRoutes = require('./routes/premium')
+
 
 
 //middlewares
@@ -51,6 +53,11 @@ app.get('/dashboard', (req, res) => {
   res.sendFile('dashboard.html', {root:'views'});
 });
 
+app.get('/premium', (req, res) => {
+  res.sendFile('premium.html', {root:'views'});
+});
+
+
 
 
 
@@ -61,6 +68,9 @@ app.use(userAuthentication.isAuthenticated);
 
 app.use('/expense', expenseRoutes);
 app.use('/purchase', purchaseRoutes);
+app.use('/premium', premiumUserRoutes);
+
+
 
 
 

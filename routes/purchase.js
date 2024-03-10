@@ -3,7 +3,7 @@ const router = express.Router();
 
 const purchaseController = require('../controllers/purchase');
 
-router.get('/premium', purchaseController.purchasePremium);
-router.post('/updateTransactionStatus', purchaseController.updateStatus);
+router.get('/premiumMember', purchaseController.purchasePremium);
+router.post('/updateTransactionStatus', purchaseController.updateTransactionStatus);
 
 module.exports = router;

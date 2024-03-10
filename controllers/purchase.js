@@ -7,30 +7,28 @@ const User = require('../models/User');
 exports.purchasePremium = async (req, res) => {
     
     try {
-        
-        const user = req.user;
-        const rzp = new Razorpay({
+      
+        const rzp_Instance = new Razorpay({
             key_id: process.env.RAZORPAY_KEY_ID,
             key_secret: process.env.RAZORPAY_KEY_SECRET,
         });
-
-        const amount = 2500;
+       
+        const amount = 10000;
         const currency = 'INR';
+        const order = await rzp_Instance.orders.create({ amount, currency});
+        
+            await Order.create({
+                userId:  req.user.id,
+                orderid: order.id,
+                amount: order.amount,
+                currency: order.currency,
+                status: 'PENDING',
+                orderDate: order.created_at
+            });
 
-        rzp.orders.create({ amount, currency}, (err, order) => {
-            
-            if (err) {
-                throw new Error(err)
-            }
-
-            user.createOrder({orderId: order.id, status: 'PENDING'})
-            .then((response)=> {
-                return res.status(201).json({order, key_id: rzp.key_id});
-            }).catch((err)=> {
-                throw new Error(err)
-            })
-
-        })
+            return res
+            .status(201)
+            .json({ order, key_id: rzp_Instance.key_id });
 
     } catch (err) {
        res.status(403).json({message: 'Something went Wrong', error: err}) 
@@ -41,45 +39,25 @@ exports.purchasePremium = async (req, res) => {
 
 
 
-exports.updateStatus = (req, res)=> {
 
-    console.log('xxxxxxxsfergdfgsfsdgfdsgdf');
-    if(req.body.status === 'FAILED'){
+exports.updateTransactionStatus = async (req, res) => {
 
-        const {order_id} = req.body;
+    try {
+        
+        const { order_id, payment_id } = req.body;
+        const order = await Order.findOne({ where: { orderid: order_id } });
+        
+        await Promise.all([
+            order.update({ paymentid: payment_id, status: 'SUCCESSFUL' }),
+            User.update({ ispremiumuser: true }, { where: { id: req.user.id } })
+        ]);
 
-        Order
-        .update({status: 'FAILED'}, {where: {orderId: order_id}})
-        .then((updation) => {
-            
-            if(updation[0] > 0) {
-                console.log('sssssssfergdfgsfsdgfdsgdf');
-                return res.status(200).json({message: 'Payment failed'});
-            }
-
-            res.status(404).json({message: 'Something went wrong'});
-            console.log('sfergdfgsfsdgfdsgdf');
-        }).catch((err)=> {
-            res.status(500).json({message: 'Internal Server Error'})
-        })
-
-       return;
+        return res.status(202).json({ success: true, message: 'Transaction Successful.!' });
+    
+    } catch (error) {
+        await Order.update({ status: 'FAILED', paymentid: payment_id }, { where: { orderid: order_id } });
+        console.error(error);
+        return res.status(403).json({ error, message: 'Transaction Failed. Please try again' });
     }
-    
-    
-    const {order_id, payment_id} = req.body;
-    Promise.all([Order.update({paymentId: payment_id, status: 'SUCCESSFUL'}, {where: {orderId: order_id}}),
-                 User.update({isPremiumUser: true}, {where: {id: req.user.id}})])
-    .then(([orderUpdate, userUpdate]) => {
-        if(orderUpdate[0] > 0 && userUpdate[0] > 0) {
-            console.log('----------------sfergdfgsfsdgfdsgdf');
-            return res.status(200).json({message: `Enjoy! You're A Premium User`})
-        }
 
-        res.status(404).json({message: 'Something went wrong'});
-    }).catch((err)=>{
-        res.status(500).json({message: 'Internal Server Error'})
-    })
-    console.log('tttttttttttttsfergdfgsfsdgfdsgdf');
 };
-

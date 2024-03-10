@@ -7,21 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <!--Bootstrap 5 icons CDN-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <!-- ======= Styles ====== -->
-    <link rel="stylesheet" href="/css/home.css">
-
-    <!----======== CSS ======== -->
-    <link rel="stylesheet" href="/css/appform.css">
-
-    <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/appform.css">
+    <link rel="stylesheet" href="/css/displayibtnform.css">
 
     <title>Dashboard Sidebar Menu</title>
     <style>
@@ -67,7 +60,7 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="#" id="premiumBtn">
+                        <a href="/premium">
                             <i class='bx bx-bar-chart-alt-2 icon'></i>
                             <span class="text nav-text">Premium</span>
                         </a>
@@ -129,8 +122,71 @@
 
     </nav>
 
+
+
     <section class="home">
-        <div class="text">Home</div>
+
+    <div class="row">
+        <div class="text col-md-6">Home</div>
+            <div class="text col-md-6">
+                
+                <button type="button" class="btn btn-primary iBtn" id="iBtn"><i class="bi bi-info-circle"></i></button>
+            
+            </div>
+                <!-- Modal -->
+                <div class="modal fade" id="profileDisplay" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">User Profile</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+        
+                            <div class="modal-body">
+                                <form action="#" class="displayBox">
+                                    
+                                    <div class="card imgholder box">
+                                        <img src="/images/Profile Icon.webp" alt="" width="200" height="200" class="n_displayImg">
+                                    </div>
+                                    
+                                    <div class="input_Fields" id="iBtnFields">
+                                        <div>
+                                            <label class="display" for="i_display_name">Name:</label>
+                                            <input type="text" name="n_display_name" id="i_display_name"  disabled>
+                                        </div>
+                                        <div>
+                                            <label class="display" for="i_display_type">Type:</label>
+                                            <input type="text" name="n_display_type" id="i_display_type"  disabled>
+                                        </div>
+                                        <div>
+                                            <label class="display" for="i_display_email">Email:</label>
+                                            <input type="email" name="n_display_email" id="i_display_email"  disabled>
+                                        </div>
+                                        <div>
+                                            <label class="display" for="i_display_totalIncome">T-Income:</label>
+                                            <input type="number" name="n_display_totalIncome" id="i_display_totalIncome" disabled>
+                                        </div>
+                                        <div>
+                                            <label class="display" for="i_display_totalExpense">T-Expense:</label>
+                                            <input type="number" name="n_display_totalExpense" id="i_display_totalExpense"  disabled>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-lg" id="clsBtn"data-bs-dismiss="modal">Close</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>               
+            
+        </div>
+
+
+
 
         <section class="p-3">
             <div class="row">
@@ -226,11 +282,19 @@
                                                         <ul class="dropdown-menu" aria-labelledby="i_expenseCategoryDropdown">
                                                             
                                                             <li onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Electronics & Electrical</a>
+                                                                <a class="dropdown-item" href="#">Electronics</a>
+                                                            </li>
+
+                                                            <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Electrical</a>
+                                                            </li>
+                                                             
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Fashion</a>
                                                             </li>
                                                             
                                                             <li  onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Fashion & Beauty</a>
+                                                                <a class="dropdown-item" href="#">Beauty</a>
                                                             </li>
                                                             
                                                             <li  onclick="selectCandidate(this)">
@@ -238,14 +302,22 @@
                                                             </li>
                                                             
                                                             <li  onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Travel & Transportation</a>
+                                                                <a class="dropdown-item" href="#">Food</a>
+                                                            </li>
+
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Travel</a>
+                                                            </li>
+
+                                                            <li  onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Transportation</a>
                                                             </li>
                                                             
                                                             <li  onclick="selectCandidate(this)">
                                                                 <a class="dropdown-item" href="#">Housing</a></li>
                                                             
                                                             <li  onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Health & Fitness</a>
+                                                                <a class="dropdown-item" href="#">Health</a>
                                                             </li>
                                                             
                                                             <li  onclick="selectCandidate(this)">
@@ -257,15 +329,15 @@
                                                             </li>
                                                             
                                                             <li onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Education & Books</a>
+                                                                <a class="dropdown-item" href="#">Education</a>
                                                             </li>
 
                                                             <li onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Gifts & Donations</a>
+                                                                <a class="dropdown-item" href="#">Gifts</a>
                                                             </li>
 
                                                             <li onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Savings & Investments</a>
+                                                                <a class="dropdown-item" href="#">Savings</a>
                                                             </li>
                                                 
                                                             <li onclick="selectCandidate(this)">
@@ -273,11 +345,11 @@
                                                             </li>
             
                                                             <li onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Sports & Outdoor</a>
+                                                                <a class="dropdown-item" href="#">Sports</a>
                                                             </li>
                                                             
                                                             <li onclick="selectCandidate(this)">
-                                                                <a class="dropdown-item" href="#">Office & Professional</a>
+                                                                <a class="dropdown-item" href="#">Professional</a>
                                                             </li>
 
                                                             <li onclick="selectCandidate(this)">
@@ -395,18 +467,15 @@
     </section>
 
 
-    <!-- jQuery from CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="/js/navbar.js"></script>
+    
+        <script src="/js/navbar.js"></script>
     <script src="/js/appform.js"></script>
+    <script src="/js/home.js"></script>
     
 
 </body>

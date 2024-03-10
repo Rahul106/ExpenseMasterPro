@@ -1,0 +1,98 @@
+
+/* User Profile Modal */
+#profileDisplay  .modal-dialog {
+    max-width: 700px; 
+}
+
+
+#profileDisplay .modal-content {
+    width: 100%; 
+}  
+
+
+#profileDisplay .modal-body form {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0;
+}
+
+#profileDisplay .imgholder {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 25px;
+    margin-left: 10px;
+}
+
+#profileDisplay .imgholder .upload {
+    position: absolute;
+    bottom: 0;
+    left: 10;
+    width: 100%;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.3);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#profileDisplay  .upload i {
+    color: #fff;
+    font-size: 35px;
+}
+
+#profileDisplay .imgholder:hover .upload {
+    display: flex;
+}
+
+#profileDisplay .imgholder .upload input {
+    display: none;
+}
+
+#profileDisplay .modal-body form #iBtnFields {
+    flex-basis: 32%;
+    border-left: none;
+    padding-left: 15px;
+    margin-left: 20px;
+}
+
+#profileDisplay form #iBtnFields div {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-right: 300px;
+}
+
+#profileDisplay form #iBtnFields div label {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#profileDisplay form #iBtnFields div input {
+    color: #000;
+    font-size: 15px;
+}
+
+
+#profileDisplay form #iBtnFields div {
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    
+}
+
+ #profileDisplay form #iBtnFields {
+    flex-basis: 32%;
+    border-left: none;
+   
+} 
+
+
