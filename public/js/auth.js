@@ -1,74 +1,72 @@
-const LOCAL_WINDOWS_APIURL = 'http://3.109.143.245:4000';
-const LOCAL_AWS_APIURL = 'http://localhost:4000';
+let signIn = document.getElementById("i_signInForm");
+let signUp = document.getElementById('si_userForm');
 
 
-document.getElementById("i_signInForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
- 
+const environment = "Local";
+//const environment = "Production";
+
+const LOCAL_AWS_APIURL = 'http://3.109.143.245:4000';
+const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
+
+
+
+
+
+//TODO - userLogin
+async function userLogin(e) {
+  
   try {
   
-  const email = e.target.n_email.value;
-  const password = e.target.n_password.value;
-
-  if(!email.trim()) {
-    document.querySelector("#errorAlert").innerText = `Kindly fill email field.!!!`;
-    return alertAwakeSleep();;
-  }
-
-  if(!password.trim()) {
-    document.querySelector("#errorAlert").innerText = `Kindly fill password field.!!!`;
-    return alertAwakeSleep();
-  }
+    const email = e.target.n_email.value;
+    const password = e.target.n_password.value;
   
-    const loginObj = {email, password};
-
-    let apiURL = "";
-    if (isAWSRegion()) {
-      apiURL = LOCAL_WINDOWS_APIURL;
-    } else {
-      apiURL = LOCAL_AWS_APIURL;
+    if(!email.trim()) {
+      document.querySelector("#errorAlert").innerText = `Kindly fill email field.!!!`;
+      return alertAwakeSleep();;
     }
   
-    apiURL = `${apiURL}/user/login`;
+    if(!password.trim()) {
+   
+      document.querySelector("#errorAlert").innerText = `Kindly fill password field.!!!`;
+      return alertAwakeSleep();
+    }
+  
+    const loginObj = {email, password};
+   
+    let apiURL = `${getAPIURL()}/user/login`;
     console.log(`URL : ${apiURL}`);
-
+  
     const response = await axios.post(apiURL, loginObj);
     if (response.status === 200) {
-
+  
       localStorage.setItem('token', response.data.token)
       alert(response.data.message);
-      
       window.location.href = "/home";
       e.target.n_email.value = '';
       e.target.n_password.value = '';
-    
+      
     } else {
       throw new Error("Error in credentials");
     }
+  
+  } catch (err) {
+    document.querySelector("#errorAlert").innerText = `${err.response.data.message}`;
+    alertAwakeSleep();
+    throw new Error(err);
+  }
 
-} catch (err) {
-  document.querySelector("#errorAlert").innerText = `${err.response.data.message}`;
-  alertAwakeSleep();
-  throw new Error(err);
 }
 
-});
 
 
 
+
+//TODO - add new user
 async function addNewUser(uObj) {
 
   console.log(`user-object : ${uObj}`);
 
-  let apiURL = "";
-  
-  if (isAWSRegion()) {
-    apiURL = LOCAL_WINDOWS_APIURL
-  } else {
-    apiURL = LOCAL_AWS_APIURL
-  }
-
-  apiURL = `${apiURL}/user/signup`;
+  let apiURL = `${getAPIURL()}/user/signup`;
   console.log(`URL : ${apiURL}`);
 
   try {
@@ -94,8 +92,8 @@ async function addNewUser(uObj) {
 
 
 
-document.getElementById("si_userForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+//TODO - user-registration process
+function userRegistration(e) {
 
   const name = e.target.sn_name.value;
   const email = e.target.sn_email.value;
@@ -123,14 +121,41 @@ document.getElementById("si_userForm").addEventListener("submit", async (e) => {
 
   addNewUser(userObject);
 
-});
-
-
-function isAWSRegion() {
-  // Check if the AWS SDK configuration has a region set
-  //return !!AWS.config.region;
-  return false;
 }
+  
+
+
+
+//!Homework - Make Below Code Modular
+//TODO - set headers and token
+const getHeaders = () => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  };
+
+  return headers;
+};
+
+
+
+
+//TODO - check Local/Production
+const getAPIURL = () => {
+
+  if (environment.toUpperCase() === 'LOCAL') {
+    return LOCAL_WINDOWS_APIURL;
+  } else if (environment.toUpperCase() === 'PRODUCTION') {
+    return LOCAL_AWS_APIURL;
+  } else {
+    throw new Error('Invalid environment specified');
+  }
+
+};
+
 
 
 function alertAwakeSleep() {
@@ -139,6 +164,8 @@ function alertAwakeSleep() {
     document.getElementById("errorAlert").classList.toggle("hidden");
   }, 1500);
 }
+
+
 
 
 function  successAlertAwakeSleep() {
@@ -150,3 +177,16 @@ function  successAlertAwakeSleep() {
 
 
 
+
+signIn.addEventListener('submit', function(event) {
+  event.preventDefault();
+  userLogin(event);
+});
+
+
+
+
+signUp.addEventListener('submit', function(event) {
+  event.preventDefault();
+  userRegistration(event);
+});

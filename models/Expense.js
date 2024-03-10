@@ -37,7 +37,7 @@ const Expense = sequelize.define('expenses', {
     
     amount: {
         type: DataTypes.DOUBLE,
-        allowNull: false
+        defaultValue: 0
     },
 
     date: {

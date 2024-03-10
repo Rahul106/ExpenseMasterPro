@@ -1,11 +1,11 @@
-const LOCAL_AWS_APIURL = 'http://3.109.143.245:4000';
-const LOCAL_WINDOWS_APIURL = 'http://localhost:4000';
+// const LOCAL_AWS_APIURL = 'http://3.109.143.245:4000';
+// const LOCAL_WINDOWS_APIURL = 'http://localhost:4000';
 
 
 const logoutBtn = document.getElementById("logoutBtn");
 const body = document.querySelector("body"),
   sidebar = body.querySelector("nav"),
-  toggle = body.querySelector(".toggle"),
+  navbartoggle = body.querySelector(".toggle"),
   searchBtn = body.querySelector(".search-box"),
   modeSwitch = body.querySelector(".toggle-switch"),
   modeText = body.querySelector(".mode-text");
@@ -13,53 +13,69 @@ const body = document.querySelector("body"),
 
 
   
-function buyPremium() {
+// async function buyPremium() {
 
-  console.log('-----Buy-Premium-----');
+//   console.log('-----Buy-Premium-----');
 
-  axios.get(`${LOCAL_WINDOWS_APIURL}/purchase/premium`, getHeaders())
-        .then((response) => {
-          
-          console.log('--------------------------------------------------------'+response.data.order.id);
-          var paymentcreds = {
-            //'name' : 'Expensify',
-            //'description' : 'Buying-Premium',
-            'key': response.data.key_id,
-            'order_id': response.data.order.id,
-            'handler': async (response) => {
+//   try {
+
+//     const response = await axios.get(`${LOCAL_WINDOWS_APIURL}/purchase/premiumMember`, getHeaders())
+//     console.log(`Response-Data-Order-Id : ${response.data.status}`);
+    
+//       // Create the payment handler function
+//       var paymentcreds = { 
+      
+//         "key": response.data.key_id,
+//         "order_id": response.data.order.id,
+//         "handler": async function (response) {
+      
+//           try {
         
-              const respMsg = await axios.post(`${LOCAL_WINDOWS_APIURL}/purchase/updateTransactionStatus`, {
-                order_id: paymentcreds.order_id,
-                payment_id: response.razorpay_payment_id
-                }, getHeaders());
+//             // Make a POST request to update the transaction status
+//             const res = await axios.post(`${LOCAL_WINDOWS_APIURL}/purchase/updateTransactionStatus`, {
+//             order_id: paymentcreds.order_id,
+//             payment_id: response.razorpay_payment_id,
+//            }, getHeaders());
+        
+//             //premiumUserMsg();
+//             alert('Your Premium Membership is now active'); 
+//             localStorage.setItem('token',res.data.token)
+//             //showLeaderBoard();  
+//             //showDownloadsHistory();
+      
+//           } catch (err) {
+//             console.error(err);
+//             throw new Error(err);
+//           }
 
-                alert(respMsg.data.message);
-                //showPremiumFeatures();
-              },
-          };
+//       }
+//     }  
+  
+    
+//     // Create the Razorpay instance and open the payment modal
+//     const razorPayModel = new Razorpay(paymentcreds);
+//     razorPayModel.open();
+    
+//     razorPayModel.on('payment.failed', async (response) => {
+      
+//       try {
 
-          const rzp = new Razorpay(paymentcreds);
-          rzp.open();
+//         alert(`Alert: ${response.error.description}`)
+        
+//       } catch (error) {
+//         console.log(error)
+//         alert(`Payment failed due to ${error.error.description}`);
+//       }
+      
+//     });
 
-          rzp.on('payment.failed', (response) => {
+//   } catch (err) {
+//     console.log(err);
+//     alert('Something went wrong last line. Please try again.');
+//     throw new Error(err);
+//   }
 
-            const orderId = response.error.metadata.order_id;
-
-            axios.post(`${LOCAL_WINDOWS_APIURL}/purchase/updateTransactionStatus`, { status: 'FAILED', order_id: orderId }, getHeaders())
-              .then((resp) => {
-                  alert(resp.data.message)
-                }).catch((err) => {
-                  console.log(err);
-                })
-           })
-
-        }) .catch((err) => {
-            alert(err.response.data.message);
-        })
-
-        console.log('-----Buy-Premium-----');
-
-}
+// }
 
 
 
@@ -75,7 +91,7 @@ function logout() {
 
 
 
-toggle.addEventListener("click", () => {
+navbartoggle.addEventListener("click", () => {
   sidebar.classList.toggle("close");
 });
 
@@ -106,23 +122,26 @@ logoutBtn.addEventListener("click", function(event) {
 
 
 
-premiumBtn.addEventListener('click', function(event) {
-  event.preventDefault();
-  buyPremium();
-});
+// premiumBtn.addEventListener('click', function(event) {
+//   event.preventDefault();
+//   buyPremium();
+// });
 
 
 
-//set headers and token
-function getHeaders() {
+// //set headers and token
+// function getHeaders() {
 
-    const token = localStorage.getItem('token');
-    const headers = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
-    };
+//     const token = localStorage.getItem('token');
+//     const headers = {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': token
+//         }
+//     };
 
-    return headers;
-}
+//     return headers;
+// }
+
+
+

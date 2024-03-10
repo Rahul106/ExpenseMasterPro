@@ -85,16 +85,16 @@ td button i {
 .modal-body form .input_Field {
     flex-basis: 32%;
     border-left: none;
-    padding-left: 15px;
-    margin-left: 20px;
+    padding-left: 20px;
+    margin-left: 28px;
 }
 
 
 .modal-body form .input_Fields {
     flex-basis: 32%;
     border-left: none;
-    padding-left: 15px;
-    margin-left: 20px;
+    padding-left: 10px;
+    margin-left: 16px;
 }
 
 form .input_Fields div,
@@ -159,7 +159,7 @@ form .input_Field div input {
 
 #readData .imgholder {
     width: 200px;
-    height: 180px;
+    height: 200px;
     position: relative;
     border-radius: 20px;
     overflow: hidden;
@@ -194,14 +194,6 @@ form .input_Field div input {
 }
 
 #readData .modal-body form .input_Field {
-    flex-basis: 32%;
-    border-left: none;
-    padding-left: 15px;
-    margin-left: 20px;
-}
-
-
-#readData .modal-body form .input_Fields {
     flex-basis: 32%;
     border-left: none;
     padding-left: 15px;
@@ -247,7 +239,7 @@ form .input_Field div input {
     border-left: none;
    
 }
-
+ 
 @media screen and (max-width: 950px) {
     table thead tr {
         display: none;
