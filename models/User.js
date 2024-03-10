@@ -26,10 +26,10 @@ const User = sequelize.define("user", {
     allowNull: false,
   },
 
-  // totalamount: {
-  //   type: DataTypes.DOUBLE,
-  //   defaultValue: 0
-  // },
+  totalamount: {
+    type: DataTypes.DOUBLE,
+    defaultValue: 0
+  },
 
   // totalincome: {
   //   type: DataTypes.DOUBLE,

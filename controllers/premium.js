@@ -36,8 +36,6 @@ exports.getLeaderboard = async (req, res) => {
 
     try {
         
-        console.log('----'+req.user.id);
-        
         const leaderBoardData = await User.findAll({
             attributes: [
               'name',
