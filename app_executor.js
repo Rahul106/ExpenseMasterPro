@@ -24,7 +24,9 @@ const Order = require('./models/Order');
 const userRoute = require("./routes/user");
 const expenseRoutes = require('./routes/expense');
 const purchaseRoutes = require('./routes/purchase');
-const premiumUserRoutes = require('./routes/premium')
+const premiumUserRoutes = require('./routes/premium');
+const passwordRoutes = require('./routes/forgotpassword');
+const ForgotPassword = require("./models/ForgotPassword");
 
 
 
@@ -45,6 +47,11 @@ app.get('/logout', (req, res) => {
   res.sendFile('portal.html', {root: 'views'});
 });
 
+app.get('/reset-password', (req, res) => {
+  res.sendFile('forgotpassword.html', {root:'views'});
+});
+
+
 app.get('/home', (req, res) => {
   res.sendFile('home.html', {root:'views'});
 });
@@ -57,18 +64,24 @@ app.get('/premium', (req, res) => {
   res.sendFile('premium.html', {root:'views'});
 });
 
+app.get('/premium', (req, res) => {
+  res.sendFile('premium.html', {root:'views'});
+});
+
 
 
 
 
 //router middlewares
 app.use('/user', userRoute);
-
+app.use('/password', passwordRoutes);
 app.use(userAuthentication.isAuthenticated);
 
 app.use('/expense', expenseRoutes);
 app.use('/purchase', purchaseRoutes);
 app.use('/premium', premiumUserRoutes);
+
+
 
 
 
@@ -80,6 +93,9 @@ Expense.belongsTo(User);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(ForgotPassword);
+ForgotPassword.belongsTo(User);
 
 
 
