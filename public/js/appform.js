@@ -118,7 +118,7 @@ imgFile.onchange = function () {
 
 
 async function showExpenseInfo(element,  index) {  
-
+   
     const date = new Date(element.date);    
             const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     
@@ -148,13 +148,13 @@ async function showExpenseInfo(element,  index) {
 
 function readInfo(ePic, eType, eCat, eName, eDesc, eAmt, eDate) {
 
-        document.querySelector('.n_showImg').src = ePic;
-        document.querySelector('#i_show_expType').value = eType;
-        document.querySelector('#i_show_expCat').value = eCat;
-        document.querySelector('#i_show_expName').value = eName;
-        document.querySelector('#i_show_expDesc').value = eDesc;
-        document.querySelector('#i_show_expAmt').value = eAmt;
-        document.querySelector('#i_show_expDate').value = eDate;
+    document.querySelector('.n_showImg').src = ePic;
+    document.querySelector('#i_show_expType').value = eType;
+    document.querySelector('#i_show_expCat').value = eCat;
+    document.querySelector('#i_show_expName').value = eName;
+    document.querySelector('#i_show_expDesc').value = eDesc;
+    document.querySelector('#i_show_expAmt').value = eAmt;
+    document.querySelector('#i_show_expDate').value = eDate;
 
 }
 
@@ -162,7 +162,7 @@ function readInfo(ePic, eType, eCat, eName, eDesc, eAmt, eDate) {
 
 
 function editInfo(index, ePic, eType,  eCat, eName, eDesc, eAmt, eDate) {
-   
+   alert(eCat);
     isEdit = true;
     editId = index;
     imgInput.src = ePic;
@@ -219,7 +219,6 @@ form.addEventListener('submit', async (e) => {
     formData.set('n_Category', getSelectedCandidate());
     formData.set('n_transactionType', getSelectedTransactionType());
 
-  
     if (imgInput.src === undefined || imgInput.src === '') {
         formData.set('n_imgInput', './image/Profile Icon.webp');
     } else {

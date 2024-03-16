@@ -8,6 +8,8 @@ const User = require('../models/User')
 //update expense
 exports.updateExpense = async (req, res) => {
 
+  let t;
+
   try {
       
     const {amount ,description, category, amountType} = req.body;
@@ -19,7 +21,9 @@ exports.updateExpense = async (req, res) => {
         .json({error: 'Expense Id is missing in url for update.'})
     }
       
-    const updatedExpense = await Expense.update({ 
+    t = await sequelize.transaction();
+
+    const [updatedRowsCount, updatedExpense] = await Expense.update({ 
       imgPath: req.body.n_imgInput,
       type: req.body.n_transactionType,
       category: req.body.n_Category,
@@ -29,23 +33,31 @@ exports.updateExpense = async (req, res) => {
       date: req.body.n_expDate
     }, 
     { 
-      where: {id : id} 
+      where: {id : id},
+      returning: true,
+      transaction: t 
     });
         
-    if (updatedExpense[0] === 0) {
+    if (updatedRowsCount === 0) {
+      await t.rollback();
       return res
         .status(400)
-        .json({ status: "Failed",
+        .json({ 
+          status: "Failed",
           message: "Expense Update Failed", 
-          data: updatedExpense });   
+          data: updatedExpense
+        });   
     }
     
+    await t.commit();
+    console.log(`Expense with ID ${id} updated successfully.`);
+
     return res
       .status(200)
       .json({ 
         status: "Success",
         message: "Expense Updated SuccessFully", 
-        data: updatedExpense 
+        data: updatedExpense
       }); 
 
   } catch(err) {
@@ -57,10 +69,9 @@ exports.updateExpense = async (req, res) => {
         .json ({ 
           status: "error", 
           message: "Expense data not updated - Internal server error. Please try again later.", 
-          data: updatedExpense 
         });
 
-}
+  }
 
 }
 
@@ -68,10 +79,12 @@ exports.updateExpense = async (req, res) => {
 //delete Expense
 exports.deleteExpense = async (req, res) => {
 
+  let t;
+
   try {
       
     const { id } = req.params;
-      
+
     if(!id.trim()) {
        
           return res
@@ -80,10 +93,13 @@ exports.deleteExpense = async (req, res) => {
     
     }
 
-    const expense = await Expense.findByPk(id);
+    t = await sequelize.transaction();
+    console.log(`Deleting Expense with ID: ${id}`);
+
+    const expense = await Expense.findByPk(id,  { transaction: t });
 
     if (!expense) {
-      
+      await t.rollback();
       return res
       .status(400)
       .json({error : 'Expense record not found in db.'})
@@ -95,10 +111,12 @@ exports.deleteExpense = async (req, res) => {
         id: id,
         userId: req.user.id
       },
+      transaction: t
     });
 
     if (rowsDeleted > 0) {
 
+      await t.commit();
       return res
         .status(200)
         .json({ status: "success",
@@ -107,6 +125,7 @@ exports.deleteExpense = async (req, res) => {
 
     } else {
 
+      await t.rollback();
       return res
         .status(404)
         .json({ status: "error", 
@@ -116,6 +135,9 @@ exports.deleteExpense = async (req, res) => {
     }
   
     } catch(err) {
+
+      if (t) 
+      await t.rollback();
 
       console.error(`Error in deleting expense : ${err}`);
       
