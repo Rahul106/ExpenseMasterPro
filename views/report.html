@@ -63,7 +63,13 @@
                                 <span class="text nav-text">Premium</span>
                             </a>
                         </li>
-
+    
+                        <li class="nav-link">
+                            <a href="#">
+                                <i class='bx bx-bell icon'></i>
+                                <span class="text nav-text">Notifications</span>
+                            </a>
+                        </li>
     
                         <li class="nav-link">
                             <a href="/report">
@@ -116,10 +122,11 @@
 
         <section class="home">
             <div class="row">
-                <div class="text col-md-6">Premium</div>
+                <div class="text col-md-6">Reports</div>
                 <div class="text col-md-6 d-flex justify-content-end">
                     <button type="button" class="btn btn-primary iBtn" id="iBtn"><i class="bi bi-info-circle"></i></button>
-                
+                    
+                    
                 <!-- Modal -->
                 <div class="modal fade" id="profileDisplay" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -169,47 +176,55 @@
                         </div>
                     </div>
                 </div>  
+                
+                </div>
+            </div>
+
+            <section class="p-3">
+                <div id="non premium report">
+                    To enable this feature, please buy a premium subscription.
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-primary btn-lg reportBtn" id="reportBtn" data-bs-target="#history" data-bs-toggle="modal">Show History  <i class="bi-file-bar-graph-fill"></i></button>
+                        &nbsp;
+                        <button class="btn btn-primary btn-lg downloadReportsBtn" id="downloadReportsBtn">Download Reports  <i class="bi-file-earmark-arrow-down-fill"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="p-3">
+                <div class="row">
+                    <div class="col-12">
+                       
+                            <!-- History Modal -->
+    <div class="modal fade" id="history" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Download History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+
+                        <table class="table table-striped table-bordered table-rounded mt-4" id="historyTable">
+                            <!--download history goes here-->
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
+    </div>
 
-        <section class="p-3">
-            <div class="row">
-                <div class="col-12">
-                    <!-- Button will be dynamically added here -->
-                    <!-- <ul id="buttonContainer"></ul> -->
-                    <button class="btn btn-primary btn-lg premiumBtn" id="premiumBtn">Buy Premium  <i class="bi bi-cash"></i></button>
-                    <button class="btn btn-primary btn-lg leaderBtn" id="leaderBtn">View Leaderboard<i class="bi bi-award-fill"></i></button>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <section class="p-3">
-            <div class="row">
-                <div class="col-12">
-                    <button class="btn btn-primary btn-lg leaderBtn" id="leaderBtn">View Leaderboard<i class="bi bi-award-fill"></i></button>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-striped table-hover mt-3 text-center table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="tHead">Rank</th>
-                                <th class="tHead">Name</th>
-                                <th class="tHead">Total Expense</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="leaderData"></tbody>
-
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        
-    </section>
+                
+            </section>
 
     
     
@@ -223,7 +238,9 @@
     
     <script src="/js/home.js"></script>
     <script src="/js/navbar.js"></script>
-    <script src="/js/premium.js"></script>
+    <!-- <script src="/js/premium.js"></script> -->
+    <script src="/js/report.js"></script>
+   
 
 </body>
 </html>

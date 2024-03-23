@@ -158,24 +158,45 @@ exports.getAllExpenses = async (req, res) => {
 
   try {
     
-    const allExpenses = await Expense.findAll({ where: {userId : req.user.id}});
-    console.log(`All-Expenses : ${allExpenses}`);
+    const user = req.user;
+    const page = req.query.page;
+	
+    console.log('Page: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', page);
 
-    if (!allExpenses || allExpenses.length === 0) {
-        
-      console.log('-----No Expense Found-----');
+	  const itemsPerPage = 5
+    const limit = Number(req.query.limit) || itemsPerPage;
+    const offset = (page-1)* limit;
+	
+	  Promise.all([
+      user.countExpenses(), 
+		  Expense.findAll({ where: {userId : req.user.id}, offset: offset, limit: limit})
+    ]).then(([count, expenses]) => {
+		  console.log(count);
+      const hasMoreData = count - (page-1)*limit > limit ? true : false;
+      const nextPage = hasMoreData ? Number(page) + 1 : undefined;
+      const previousPage = page > 1 ? Number(page)-1 : undefined;
+      const hasPreviousPage = previousPage ? true : false
 
-      return res
-        .status(200)
-        .json({ status: "success", 
-        message: "No Expense Found in db.", data: [] });
+		res.status(200).json({
+      data: expenses,
+      message: "Expenses Found",
+      hasNextPage: hasMoreData,
+      nextPage: nextPage,
+      currentPage: page,
+      previousPage: previousPage,
+      hasPreviousPage: hasPreviousPage
+      })
+    })
 
-    }
+    console.log('-----No Expense Found-----');
 
-      return res
-        .status(200)
-        .json({ status: "success", data: allExpenses });
-
+    // return res
+    //   .status(200)
+    //   .json({ 
+    //     status: "success", 
+    //     message: "No Expense Found in db.", data: [] 
+    //   });
+     
     } catch(error) {
 
       console.log(`Error in fetching all expenses : ${error}`)
@@ -207,25 +228,28 @@ exports.postExpenseData = async (req, res) => {
 
   try { 
 
-    t = await sequelize.transaction();
+      t = await sequelize.transaction();
         
-    const newExpense = await Expense.create({
-      imgPath : req.body.n_imgInput,
-      type : req.body.n_transactionType,
-      category : req.body.n_Category,
-      name : req.body.n_expName,
-      amount : req.body.n_expAmount,
-      description : req.body.n_expDescription,
-      date : req.body.n_expDate,
-      userId : req.user.id
-    }, { transaction: t });
+      const newExpense = await Expense.create({
+        imgPath : req.body.n_imgInput,
+        type : req.body.n_transactionType,
+        category : req.body.n_Category,
+        name : req.body.n_expName,
+        amount : req.body.n_expAmount,
+        description : req.body.n_expDescription,
+        date : req.body.n_expDate,
+        userId : req.user.id
+      }, { transaction: t });
 
-    const user = await User.findByPk(req.user.id, { transaction: t });
+      console.log(`New-Expense : ${newExpense.amount}`);
+
+      const user = await User.findByPk(req.user.id, { transaction: t });
+      console.log(`Total-Amount : ${user.totalamount}`);
 
       if (!user) {
         throw new Error('User not found');
       }
-  
+      
       let totalAmount = user.totalamount + newExpense.amount;
       await user.update({ totalamount: totalAmount }, { transaction: t });
       await t.commit();

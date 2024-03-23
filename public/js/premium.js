@@ -1,6 +1,11 @@
+
 const premiumBtn = document.getElementById("premiumBtn");
 const leaderBtn = document.getElementById("leaderBtn");
 const section = document.querySelector(".p-3");
+
+
+
+
 
 
 
@@ -108,6 +113,7 @@ async function buyPremium() {
               localStorage.setItem('token', res.data.token)
   
               showPremiumFeatures();
+              setTimeout(logout, 3000);
               //premiumUserMsg();
               //showLeaderBoard();  
               //showDownloadsHistory();
@@ -161,7 +167,6 @@ async function buyPremium() {
 
 
 
-
   leaderBtn.addEventListener('click', function(event) {
     event.preventDefault();
     showLeaderBoard();
@@ -169,3 +174,5 @@ async function buyPremium() {
 
 
 
+
+  

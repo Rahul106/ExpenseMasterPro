@@ -146,6 +146,26 @@ form .input_Field div input {
     background-color: var(--primary-color);
 }
 
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination button {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #fff;
+    background-color: var(--primary-color);
+    border: 1px solid #393e44;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: blue;
+    border-color: #101111;
+    color: #fff;
+}
 
 
 /* Read Modal Form */
