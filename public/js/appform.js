@@ -77,9 +77,8 @@ function selectCandidate(item) {
 
 
 function getSelectedCandidate() {
-    alert(selectedCategory);
+   
     if (!selectedCategory || selectedCategory.toLowerCase() === "category") {
-        alert('Default Category Used');
         selectedCategory = "Others";
     }
 
@@ -117,32 +116,141 @@ imgFile.onchange = function () {
 
 
 
-async function showExpenseInfo(element,  index) {  
-   
-    const date = new Date(element.date);    
-            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+async function initPage() {
+
+    const limit = localStorage.getItem('rowsPerPage') || 5;
     
-            let createElement = `<tr class='expenseDetail'>
-                <td data-title="S.No">${index + 1}</td>
-                <td data-title="Expense Picture"><img src='${element.imgPath}' alt='' width='50' height='50'></td>
-                <td data-title="Expense Type">${element.type}</td>
-                <td data-title="Expense Category">${element.category}</td>
-                <td data-title="Expense Name">${element.name}</td>
-                <td data-title="Expense Desciption">${element.description}</td>
-                <td data-title="Expense Amount">${element.amount}</td>
-                <td data-title="Expense Date">${formattedDate}</td>
-    
-                <td data-title="Action">
-                    <button class='btn btn-success' onclick="readInfo('${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#readData'><i class='bi bi-eye'></i></button>
-                    <button class='btn btn-primary' onclick="editInfo('${element.id}', '${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#addExpenseForm'><i class='bi bi-pencil-square'></i></button>
-                    <button class='btn btn-danger' onclick='deleteInfo(${element.id})'><i class='bi bi-trash'></i></button>
-                </td>
-            </tr>`
-    
-            expData.innerHTML += createElement;
+    let apiURL = `${getAPIURL()}/expense/fetch-expenses?page=1&limit=${limit}`;
+    console.log(`URL : ${apiURL}`);
+
+    const expenseData = await axios.get(apiURL, getHeaders());
+    console.log(expenseData);
+
+    let count = 0;
+    for (let i = 0; i < expenseData.data.data.length; i++) {
+        showExpenseInfo(expenseData.data.data[i], count++);
+    }
+
+    showPagination(expenseData.data, count);
 
 }
 
+
+
+
+
+async function updateRows(e) {
+
+    try {
+
+      const limit = e.target.value;
+      localStorage.setItem('rowsPerPage', limit);
+  
+      let apiURL = `${getAPIURL()}/expense/fetch-expenses?page=1&limit=${limit}`;
+      console.log(`URL : ${apiURL}`);
+  
+      const expenseData = await axios.get(apiURL, getHeaders());
+      console.log(expenseData);
+
+        expData.innerHTML = "";
+        let count=0;
+        for (let i = 0; i < expenseData.data.data.length; i++) {
+            showExpenseInfo(expenseData.data.data[i], count++);
+        }
+       
+        showPagination(expenseData.data, count)
+    }
+    catch (err) {
+        alert(err.expenseData.data.message)
+    }
+  
+  }
+
+
+
+
+
+  function showPagination(pageData, count) {
+
+    const pageContainer = document.getElementById('pagination');
+    pageContainer.innerHTML = '';
+
+    if (pageData.hasPreviousPage) {
+        const btn2 = document.createElement('button');
+        btn2.innerHTML = 'Previous Page';
+        pageContainer.appendChild(btn2);
+        btn2.addEventListener('click', () => getExpenses(pageData.previousPage, count));
+
+    }
+    
+    const btn1 = document.createElement('button');
+    btn1.innerHTML = `${pageData.currentPage}`;
+    pageContainer.appendChild(btn1);
+    btn1.addEventListener('click', () => getExpenses(pageData.currentPage, count));
+
+    if (pageData.hasNextPage) {
+        const btn3 = document.createElement('button');
+        btn3.innerHTML = 'Next Page';
+        pageContainer.appendChild(btn3);
+        btn3.addEventListener('click', () => getExpenses(pageData.nextPage, count));
+    }
+}
+
+
+
+
+async function getExpenses(page, count) {
+
+    try {
+        
+        const limit = localStorage.getItem('rowsPerPage') || 5;
+
+        let apiURL = `${getAPIURL()}/expense/fetch-expenses?page=${page}&limit=${limit}`;
+        console.log(apiURL);
+
+        const expenseData = await axios.get(apiURL, getHeaders());
+        console.log(expenseData);
+        
+        expData.innerHTML = "";
+        for (let i = 0; i < expenseData.data.data.length; i++) {
+            showExpenseInfo(expenseData.data.data[i], count++);
+        }
+       
+        showPagination(expenseData.data, count)
+       
+    }
+    catch (err) {
+        alert(err.expenseData.data.message)
+    }
+}
+
+
+
+
+
+async function showExpenseInfo(element,  index) {  
+        
+    const date = new Date(element.date);    
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    let createElement = `<tr class='expenseDetail'>
+        <td data-title="S.No">${index + 1}</td>
+        <td data-title="Expense Picture"><img src='${element.imgPath}' alt='' width='50' height='50'></td>
+        <td data-title="Expense Type">${element.type}</td>
+        <td data-title="Expense Category">${element.category}</td>
+        <td data-title="Expense Name">${element.name}</td>
+        <td data-title="Expense Desciption">${element.description}</td>
+        <td data-title="Expense Amount">${element.amount}</td>
+        <td data-title="Expense Date">${formattedDate}</td>
+        <td data-title="Action">
+            <button class='btn btn-success' onclick="readInfo('${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#readData'><i class='bi bi-eye'></i></button>
+            <button class='btn btn-primary' onclick="editInfo('${element.id}', '${element.imgPath}', '${element.type}', '${element.category}', '${element.name}', '${element.description}', '${element.amount}', '${formattedDate}')" data-bs-toggle='modal' data-bs-target='#addExpenseForm'><i class='bi bi-pencil-square'></i></button>
+            <button class='btn btn-danger' onclick='deleteInfo(${element.id})'><i class='bi bi-trash'></i></button>
+        </td>
+    </tr>`
+    
+    expData.innerHTML += createElement;
+}
 
 
 
@@ -162,7 +270,7 @@ function readInfo(ePic, eType, eCat, eName, eDesc, eAmt, eDate) {
 
 
 function editInfo(index, ePic, eType,  eCat, eName, eDesc, eAmt, eDate) {
-   alert(eCat);
+   
     isEdit = true;
     editId = index;
     imgInput.src = ePic;
@@ -185,6 +293,7 @@ function editInfo(index, ePic, eType,  eCat, eName, eDesc, eAmt, eDate) {
     modalTitle.innerText = '#Update The Form!!!';
 
 }
+
 
 
 
@@ -212,12 +321,14 @@ async function deleteInfo(index) {
 
 
 
+
 form.addEventListener('submit', async (e) => {
     e.preventDefault()
 
     const formData = new FormData(e.target);
     formData.set('n_Category', getSelectedCandidate());
     formData.set('n_transactionType', getSelectedTransactionType());
+
 
     if (imgInput.src === undefined || imgInput.src === '') {
         formData.set('n_imgInput', './image/Profile Icon.webp');
@@ -229,14 +340,20 @@ form.addEventListener('submit', async (e) => {
 
         try {
 
-            const resp = await axios.post(`${localPublicIP}/expense/insert-expense`, formData, getHeaders());
+            const resp = await axios.post(`${getAPIURL()}/expense/insert-expense`, formData, getHeaders());
+            
             if (resp.status === 201) {
-
+                
                 alert('Expense added successfully');
-                const data = resp.data.data;
-                showExpenseInfo(data, data.id);
-                location.reload();
+                const limit = localStorage.getItem('rowsPerPage') || 5;
+                const totalExpenses = document.querySelectorAll('#expenseData tr').length;
 
+                if (totalExpenses == 0 || totalExpenses % limit !== 0) {
+                    showExpenseInfo(resp.data.data, data.id);
+                }
+
+                location.reload();
+            
             } else {
                 alert('Failed to add expense');
             }
@@ -249,6 +366,7 @@ form.addEventListener('submit', async (e) => {
 
         try {
 
+            formData.set('n_Category', document.getElementById('i_expenseCategoryDropdown').innerText);
             const response = await axios.put(`${localPublicIP}/expense/update-expense/${editId}`, formData, getHeaders());
 
             if (response.status === 200) {
@@ -287,23 +405,6 @@ async function fetchTotalExpense() {
     }
 
 }
-
-
-
-// Call the fetchTotalExpense function when the page loads
-document.addEventListener('DOMContentLoaded', async () => {
-
-    expData.innerHTML = "";
-    const responseExpenses = await axios.get(`${localPublicIP}/expense/fetch-expenses`, getHeaders());
-
-    if(responseExpenses.data) {
-        responseExpenses.data.data.forEach((elem, indx) => {
-            showExpenseInfo(elem, indx);
-        });
-    }
-    
-});
-
 
 
 
@@ -386,3 +487,12 @@ const getHeaders = () => {
   
   };
   
+
+
+
+
+  // Call the fetchTotalExpense function when the page loads
+document.addEventListener('DOMContentLoaded', async () => {
+
+    initPage();
+});

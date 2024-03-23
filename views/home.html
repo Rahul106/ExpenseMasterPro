@@ -67,16 +67,9 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-bell icon'></i>
-                            <span class="text nav-text">Notifications</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link">
-                        <a href="#">
+                        <a href="/report">
                             <i class='bx bx-pie-chart-alt icon'></i>
-                            <span class="text nav-text">Analytics</span>
+                            <span class="text nav-text">Reports</span>
                         </a>
                     </li>
 
@@ -128,10 +121,8 @@
 
     <div class="row">
         <div class="text col-md-6">Home</div>
-            <div class="text col-md-6">
-                
+            <div class="text col-md-6 d-flex justify-content-end">
                 <button type="button" class="btn btn-primary iBtn" id="iBtn"><i class="bi bi-info-circle"></i></button>
-            
             </div>
                 <!-- Modal -->
                 <div class="modal fade" id="profileDisplay" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -190,11 +181,25 @@
 
         <section class="p-3">
             <div class="row">
-                <div class="col-12">
+                <div class="col-md-9">
                     <button onclick="resetForm()" class="btn btn-primary btn-lg newExpense" data-bs-toggle="modal"
                         data-bs-target="#addExpenseForm">New Expense
                         <i class="bi bi-people"></i></button>
                 </div>
+                <div class="col-md-3 d-flex justify-content-end">
+                    <div class="form-group">
+                        <label for="rowsPerPage" class="text-black"><b><h5>Expenses per page:</h5></b></label>
+                            <select id="rowsPerPage" onchange="updateRows(event)" class="form-control">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                                <option value="75">75</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                 </div>
             </div>
 
             <div class="row">
@@ -214,9 +219,13 @@
                             </tr>
                         </thead>
 
-                        <tbody id="expenseData"></tbody>
-
+                        <tbody id="expenseData">
+                            <!--user expenses goes here-->
+                        </tbody>
                     </table>
+                    <div class="pagination-container">
+                        <ul class="pagination justify-content-end" id="pagination"></ul>
+                    </div>
                 </div>
             </div>
         </section>
@@ -353,6 +362,10 @@
                                                             </li>
 
                                                             <li onclick="selectCandidate(this)">
+                                                                <a class="dropdown-item" href="#">Salary</a>
+                                                            </li>
+
+                                                            <li onclick="selectCandidate(this)">
                                                                 <a class="dropdown-item" href="#">Others</a>
                                                             </li>
                                                         
@@ -473,7 +486,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     
-        <script src="/js/navbar.js"></script>
+    <script src="/js/navbar.js"></script>
     <script src="/js/appform.js"></script>
     <script src="/js/home.js"></script>
     

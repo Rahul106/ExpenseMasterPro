@@ -92,6 +92,7 @@ async function addNewUser(uObj) {
 
 
 
+
 //TODO - user-registration process
 function userRegistration(e) {
 
@@ -190,3 +191,5 @@ signUp.addEventListener('submit', function(event) {
   event.preventDefault();
   userRegistration(event);
 });
+
+

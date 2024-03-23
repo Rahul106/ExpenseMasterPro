@@ -1,3 +1,11 @@
+let iBtn = document.getElementById('iBtn');
+let list = document.querySelectorAll(".navigation li");
+
+
+// Menu Toggle
+let toggle = document.querySelector(".toggle");
+let navigation = document.querySelector(".navigation");
+let main = document.querySelector(".main");
 
 
 const environment = "Local";
@@ -13,13 +21,13 @@ const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
 async function getCurrentUser() {
 
   try {
-    console.log('-----------------------')
+  
     let apiURL = `${getAPIURL()}/user/current-user`;
     console.log(`URL : ${apiURL}`);
   
     const response = await axios.get(apiURL, getHeaders());
     if (response.status === 200) {
-        
+       
         let userObj = response.data.data;
         
         document.querySelector('#i_display_name').value = userObj.name;
@@ -44,7 +52,7 @@ async function getCurrentUser() {
 }
 
 
-let iBtn = document.getElementById('iBtn');
+
 
 iBtn.addEventListener('click', function(event) {
   event.preventDefault();
@@ -108,7 +116,7 @@ function  successAlertAwakeSleep() {
 
 
 
-let list = document.querySelectorAll(".navigation li");
+
 
 function activeLink() {
   list.forEach((item) => {
@@ -119,13 +127,12 @@ function activeLink() {
 
 list.forEach((item) => item.addEventListener("mouseover", activeLink));
 
-// Menu Toggle
-let toggle = document.querySelector(".toggle");
-let navigation = document.querySelector(".navigation");
-let main = document.querySelector(".main");
+
+
 
 toggle.onclick = function () {
   navigation.classList.toggle("active");
   main.classList.toggle("active");
 };
+
 

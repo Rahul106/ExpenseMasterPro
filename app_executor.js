@@ -13,10 +13,13 @@ const userAuthentication = require('./middlewares/auth');
 const publicPath = path.join(__dirname, "public");
 
 
+
 //models
 const User = require("./models/User");
 const Expense = require('./models/Expense');
 const Order = require('./models/Order');
+const Password = require("./models/Password");
+const DownloadedFile = require('./models/DownloadedFile');
 
 
 
@@ -25,8 +28,7 @@ const userRoute = require("./routes/user");
 const expenseRoutes = require('./routes/expense');
 const purchaseRoutes = require('./routes/purchase');
 const premiumUserRoutes = require('./routes/premium');
-const passwordRoutes = require('./routes/forgotpassword');
-const ForgotPassword = require("./models/ForgotPassword");
+const passwordRoutes = require('./routes/password');
 
 
 
@@ -68,7 +70,9 @@ app.get('/premium', (req, res) => {
   res.sendFile('premium.html', {root:'views'});
 });
 
-
+app.get('/report', (req, res) => {
+  res.sendFile('report.html', {root:'views'});
+});
 
 
 
@@ -83,10 +87,6 @@ app.use('/premium', premiumUserRoutes);
 
 
 
-
-
-
-
 //DB Relations
 User.hasMany(Expense);
 Expense.belongsTo(User);
@@ -94,8 +94,12 @@ Expense.belongsTo(User);
 User.hasMany(Order);
 Order.belongsTo(User);
 
-User.hasMany(ForgotPassword);
-ForgotPassword.belongsTo(User);
+User.hasMany(Password);
+Password.belongsTo(User);
+
+User.hasMany(DownloadedFile);
+DownloadedFile.belongsTo(User);
+
 
 
 
