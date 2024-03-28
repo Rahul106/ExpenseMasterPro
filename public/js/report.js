@@ -2,8 +2,7 @@ const reportBtn = document.getElementById("reportBtn");
 const downloadReportsBtn = document.getElementById("downloadReportsBtn");
 const premiumSection = document.getElementById('premiumSection');
 const sections = document.querySelector(".p-3");
-
-
+const reportBtnContainer = document.getElementById('reportBtnContainer')
 
 
 
@@ -73,7 +72,7 @@ function showTextForNonPremium() {
 
 function showPremiumFeatures() {
   
-  document.getElementById('non premium report').remove();
+  //document.getElementById('non premium report').remove();
   //document.getElementById('reportBtn').display();
   //document.getElementById('downloadReportsBtn').display('downloadReportsBtn').display();
 
@@ -115,17 +114,17 @@ document.addEventListener('DOMContentLoaded', async() => {
 
 
 
-downloadReportsBtn.addEventListener('click', function(event) {
-  event.preventDefault();
-  downloadReports();
-});
+// downloadReportsBtn.addEventListener('click', function(event) {
+//   event.preventDefault();
+//   downloadReports();
+// });
 
 
 
-reportBtn.addEventListener('click', function(event) {
-  event.preventDefault();
-  downloadHistory();
-});
+// reportBtn.addEventListener('click', function(event) {
+//   event.preventDefault();
+//   downloadHistory();
+// });
 
 
 
@@ -193,3 +192,91 @@ function formatDateTime(dateTimeString) {
   return formattedDate;
 
 }
+
+
+
+
+
+
+
+function createDownloadReportsButton() {
+  
+  const downloadReportsButton = document.createElement('button');
+  
+  downloadReportsButton.classList.add('btn', 'btn-primary', 'btn-lg');
+  downloadReportsButton.id = 'downloadReportsBtn';
+  downloadReportsButton.innerHTML = 'Download Reports <i class="bi bi-file-earmark-arrow-down-fill"></i>';
+  reportBtnContainer.appendChild(downloadReportsButton);
+
+  downloadReportsButton.addEventListener('click', () => {
+    console.log('Download Reports button clicked');
+    downloadReports();
+  });
+
+}
+
+
+
+
+function createShowHistoryButton() {
+
+  const showHistoryButton = document.createElement('button');
+
+  showHistoryButton.classList.add('btn', 'btn-primary', 'btn-lg', 'me-2');
+  showHistoryButton.id = 'reportBtn';
+  showHistoryButton.setAttribute('data-bs-toggle', 'modal');
+  showHistoryButton.setAttribute('data-bs-target', '#history');
+  showHistoryButton.innerHTML = 'Show History <i class="bi bi-file-bar-graph-fill"></i>';
+
+  reportBtnContainer.appendChild(showHistoryButton);
+
+  showHistoryButton.addEventListener('click', () => {
+    console.log('Show History button clicked');
+    downloadHistory();
+  });
+
+}
+
+
+
+
+function showPremiumReportFeatures() {
+  
+  createShowHistoryButton();
+  createDownloadReportsButton();
+  
+}
+
+
+
+function showNormalReportMsg() {
+
+  const premiumMessage = document.createElement('div');
+  premiumMessage.classList.add('alert', 'alert-info');
+  premiumMessage.innerHTML = 'To enable this feature, please buy a premium subscription.';
+  reportBtnContainer.appendChild(premiumMessage);
+
+}
+
+
+
+
+document.addEventListener('DOMContentLoaded', async() => {
+
+  try {
+
+    const response = await axios.get(`${getAPIURL()}/premium/status`, getHeaders())
+      
+    if(response.status === 200) {
+      if(response.data.isPremiumUser) {
+        showPremiumReportFeatures();
+      } else {
+        showNormalReportMsg();
+      }
+    } 
+
+  } catch(error) {
+    console.log(error);
+  }
+
+});

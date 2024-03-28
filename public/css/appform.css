@@ -3,6 +3,7 @@
     --body-color: #E4E9F7;
     --sidebar-color: #fff;
     --primary-color: #512da8;
+    --primary-color-blue:#0000ff;
     --primary-color-light: #F6F5FF;
     --toggle-color: #DDD;
     --text-color: #707070;
@@ -130,7 +131,7 @@ form .input_Field div input {
     border: none;
     outline: none;
     background: transparent;
-    border-bottom: 2px solid blue;
+    border-bottom: 2px solid var(--primary-color-blue);
 }
 
 .modal-footer .submit {
@@ -162,7 +163,7 @@ form .input_Field div input {
 }
 
 .pagination button:hover {
-    background-color: blue;
+    background-color: var(--primary-color-blue);
     border-color: #101111;
     color: #fff;
 }

@@ -1,13 +1,19 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const fs = require('fs');
 const bodyParser = require("body-parser");
 const sequelize = require("./utils/database");
+const compression = require("compression");
+const morgan = require("morgan");
+
 
 
 
 //middleware for user authentication
 const userAuthentication = require('./middlewares/auth');
+
+
 
 
 const publicPath = path.join(__dirname, "public");
@@ -23,6 +29,17 @@ const DownloadedFile = require('./models/DownloadedFile');
 
 
 
+
+//write stream for access log
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  {flags: 'a'}
+);
+
+
+
+
+
 //importing routes
 const userRoute = require("./routes/user");
 const expenseRoutes = require('./routes/expense');
@@ -35,8 +52,10 @@ const passwordRoutes = require('./routes/password');
 //middlewares
 require('dotenv').config();
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(publicPath));
+app.use(compression());
+app.use(morgan('combined', {stream: accessLogStream}));
 
 
 

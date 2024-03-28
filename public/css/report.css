@@ -1,4 +1,5 @@
-:root{
+:root {
+
     /* ===== Colors ===== */
     --body-color: #E4E9F7;
     --sidebar-color: #fff;
@@ -13,20 +14,14 @@
     --tran-03: all 0.3s ease;
     --tran-04: all 0.3s ease;
     --tran-05: all 0.3s ease;
+
 }
 
-#leaderBtn {
+
+#reportBtn, #downloadReportsBtn {
     background-color: var(--primary-color);
 }
 
-#premiumBtn {
-    background-color: var(--primary-color);
-}
-
-#leaderBtn:hover {
-    background-color: var(--primary-color-blue);
-}
-
-#premiumBtn:hover {
+#reportBtn:hover, #downloadReportsBtn:hover {
     background-color: var(--primary-color-blue);
 }
