@@ -36,7 +36,10 @@ const User = sequelize.define("user", {
   //   defaultValue: 0
   // },
   
-  ispremiumuser: DataTypes.BOOLEAN
+  ispremiumuser: {
+    type:  DataTypes.BOOLEAN,
+    defaultValue: 0
+  }
 
 });
 

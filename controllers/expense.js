@@ -37,6 +37,15 @@ exports.updateExpense = async (req, res) => {
       returning: true,
       transaction: t 
     });
+
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    user.totalamount = req.body.n_expAmount;
+    await user.save();
         
     if (updatedRowsCount === 0) {
       await t.rollback();
@@ -115,13 +124,27 @@ exports.deleteExpense = async (req, res) => {
     });
 
     if (rowsDeleted > 0) {
+      
+      console.log('----1--' +req.user.id);
+      console.log('---2--' +req.user.totalamount);
+      console.log('---3--' +expense.amount);
 
-      await t.commit();
-      return res
-        .status(200)
-        .json({ status: "success",
-         message: "Expense data deleted sucessfully", 
-         data: rowsDeleted });    
+      const updatedAmount = await User.update(
+        { totalamount: req.user.totalamount - +expense.amount },
+        { where: { id: req.user.id}, transaction: t }
+      );
+    
+
+      if (updatedAmount[0] > 0) {
+        await t.commit();
+        return res
+          .status(200)
+          .json({ status: "success",
+          message: "Expense data deleted sucessfully", 
+          data: rowsDeleted });  
+      } else {
+        throw new Error('Something wrong in updation');
+      }
 
     } else {
 
@@ -145,7 +168,7 @@ exports.deleteExpense = async (req, res) => {
         .status(500)
         .json({ status: "error", 
         message: "Expense data Not deleted - Internal server error. Please try again later.", 
-        data: rowsDeleted }); 
+       }); 
   } 
 
 }
@@ -190,12 +213,6 @@ exports.getAllExpenses = async (req, res) => {
 
     console.log('-----No Expense Found-----');
 
-    // return res
-    //   .status(200)
-    //   .json({ 
-    //     status: "success", 
-    //     message: "No Expense Found in db.", data: [] 
-    //   });
      
     } catch(error) {
 
@@ -250,7 +267,7 @@ exports.postExpenseData = async (req, res) => {
         throw new Error('User not found');
       }
       
-      let totalAmount = user.totalamount + newExpense.amount;
+      let totalAmount = user.totalamount + +newExpense.amount;
       await user.update({ totalamount: totalAmount }, { transaction: t });
       await t.commit();
   

@@ -1,5 +1,14 @@
 
-const premiumBtn = document.getElementById("premiumBtn");
+
+//const environment = "Local";
+const environment = "Production";
+
+const LOCAL_AWS_APIURL = 'http://44.212.45.234:4000';
+const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
+
+
+
+//let premiumBtn;
 const leaderBtn = document.getElementById("leaderBtn");
 const section = document.querySelector(".p-3");
 const buttonContainer = document.getElementById('buttonContainer');
@@ -33,7 +42,8 @@ async function buyPremium() {
               localStorage.setItem('token', res.data.token)
   
               showPremiumFeatures();
-              setTimeout(logout, 3000);
+              setTimeout(logout, 2000);
+              
               //premiumUserMsg();
               //showLeaderBoard();  
               //showDownloadsHistory();
@@ -130,7 +140,7 @@ function segregateData(resp) {
 
 
 function createLeaderboardButton() {
-
+  
   const leaderboardButton = document.createElement('button');
  
   leaderboardButton.classList.add('btn', 'btn-primary', 'btn-lg');
@@ -148,12 +158,28 @@ function createLeaderboardButton() {
 
 
 
-function showPremiumFeatures() {
+async function showPremiumFeatures() {
   
+  await hidePremiumButton();
   createLeaderboardButton();
 
 }
 
+
+
+function hidePremiumButton() {
+
+  const premiumButton = document.getElementById('premiumBtn');
+
+  if (premiumButton) {
+    premiumButton.style.display = 'none';
+  } else {
+    console.error('Premium button not found.');
+  }
+  
+  return Promise.resolve();
+  
+}
 
 
 

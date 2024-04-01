@@ -39,7 +39,7 @@ exports.getCurrentUserInfo = async(req, res, next) => {
       }
     });
     
-    if (userDetails && (totalExpense || totalIncome)) {
+    if (userDetails) {
         
       console.log('------User Found Successfull-------')
       

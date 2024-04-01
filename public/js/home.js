@@ -1,3 +1,10 @@
+//const environment = 'Local';
+//const environment = 'Production';
+
+//const LOCAL_AWS_APIURL = 'http://44.212.45.234:4000';
+//const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
+
+
 let iBtn = document.getElementById('iBtn');
 let list = document.querySelectorAll(".navigation li");
 
@@ -7,12 +14,6 @@ let toggle = document.querySelector(".toggle");
 let navigation = document.querySelector(".navigation");
 let main = document.querySelector(".main");
 
-
-const environment = "Local";
-//const environment = "Production";
-
-const LOCAL_AWS_APIURL = 'http://3.109.143.245:4000';
-const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
 
 
 
@@ -26,6 +27,7 @@ async function getCurrentUser() {
     console.log(`URL : ${apiURL}`);
   
     const response = await axios.get(apiURL, getHeaders());
+
     if (response.status === 200) {
        
         let userObj = response.data.data;
