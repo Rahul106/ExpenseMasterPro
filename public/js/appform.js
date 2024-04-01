@@ -1,5 +1,7 @@
-const localPublicIP = 'http://localhost:4000';
- //const publicIp='http://3.109.143.245:4000';
+const localPublicIP = 'http://44.212.45.234:4000';
+const LOCAL_AWS_APIURL = 'http://44.212.45.234:4000';
+//const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
+
 let form = document.getElementById('addExpenseForm');
 let imgInput = document.querySelector('.img');
 let imgFile = document.getElementById('i_imgInput');
