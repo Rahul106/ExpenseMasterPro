@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const fs = require('fs');
+const cors = require('cors')
 const bodyParser = require("body-parser");
 const sequelize = require("./utils/database");
 const compression = require("compression");
@@ -51,8 +52,8 @@ const passwordRoutes = require('./routes/password');
 
 //middlewares
 require('dotenv').config();
+app.use(cors());
 app.use(express.json());
-//app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(publicPath));
 app.use(compression());
 app.use(morgan('combined', {stream: accessLogStream}));
