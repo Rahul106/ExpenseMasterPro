@@ -1,10 +1,9 @@
-const environment = "Local";
-//const environment = "Production";
+//const environment = "Local";
+const environment = "Production";
 
-
-
-const LOCAL_AWS_APIURL = 'http://3.109.143.245:4000';
+const LOCAL_AWS_APIURL = 'http://44.212.45.234:4000';
 const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
+
 let resetBtn = document.getElementById('resetBtn');
 
 

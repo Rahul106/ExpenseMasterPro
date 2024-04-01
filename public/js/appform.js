@@ -1,6 +1,10 @@
-const localPublicIP = 'http://44.212.45.234:4000';
+//const environment = "Local";
+const environment = "Production";
+
+
+//const localPublicIP = 'http://44.212.45.234:4000';
 const LOCAL_AWS_APIURL = 'http://44.212.45.234:4000';
-//const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
+const LOCAL_WINDOWS_APIURL =  'http://localhost:4000';
 
 let form = document.getElementById('addExpenseForm');
 let imgInput = document.querySelector('.img');
@@ -306,8 +310,12 @@ async function deleteInfo(index) {
         confirm('Are you sure want to delete?')
         console.log(`Deleting user with ID : ${index}`);
         
-        const response = await axios.delete(`http://localhost:4000/expense/delete-expense/${index}`, getHeaders());
-         
+        let apiURL = `${getAPIURL()}/expense/delete-expense/${index}`;
+        console.log('URL : ' +apiURL);
+
+        const response = await axios.delete(apiURL, getHeaders());
+        console.log('Response : ' +response);
+
         if (response.status === 200) {
             alert('User successfully deleted');
             location.reload();
@@ -351,7 +359,7 @@ form.addEventListener('submit', async (e) => {
                 const totalExpenses = document.querySelectorAll('#expenseData tr').length;
 
                 if (totalExpenses == 0 || totalExpenses % limit !== 0) {
-                    showExpenseInfo(resp.data.data, data.id);
+                    showExpenseInfo(resp.data, resp.data.id);
                 }
 
                 location.reload();
@@ -369,7 +377,7 @@ form.addEventListener('submit', async (e) => {
         try {
 
             formData.set('n_Category', document.getElementById('i_expenseCategoryDropdown').innerText);
-            const response = await axios.put(`${localPublicIP}/expense/update-expense/${editId}`, formData, getHeaders());
+            const response = await axios.put(`${getAPIURL()}/expense/update-expense/${editId}`, formData, getHeaders());
 
             if (response.status === 200) {
                 alert('Expense updated successfully');
@@ -398,7 +406,7 @@ async function fetchTotalExpense() {
 
     try {
         
-        const response = await axios.get(`${localPublicIP}/expenseadmin/totalexpense`);
+        const response = await axios.get(`${getAPIURL()}/expenseadmin/totalexpense`);
         const totalExpense = response.data.totalExpense;
         document.getElementById('totalPrice').value = totalExpense;
     

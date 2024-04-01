@@ -9,15 +9,14 @@ const {uploadToS3} = require('../services/awsS3service.js')
 exports.getStatus = async (req, res) => {
 
     try {
-        
+
         const user = await User.findOne({
             where : {
-                id : req.user.id,
-                isPremiumUser : true
+                id : req.user.id
             } 
         });
 
-        if(user) {
+        if(user.ispremiumuser) {
             res.status(200).json({isPremiumUser: true});
         } else {
             res.status(200).json({isPremiumUser: false});
